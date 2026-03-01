@@ -86,8 +86,6 @@
 - 礼品兑换流程（静态 mock 可运行）
 - 学习统计与记录可视化页面
 
-### 界面预览（2×2）
-
 <table>
   <tr>
     <td><img src="docs/images/feature-quiz.png" width="420" alt="答题界面" /></td>
