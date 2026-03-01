@@ -1,0 +1,106 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="card-bg-pattern"></view>
+    <view class="card-content">
+      <view class="user-header">
+        <view class="user-avatar">
+          <image class="avatar-img" src="{{userInfo.avatarUrl || '/assets/images/default-avatar.png'}}" mode="aspectFill" />
+          <view class="avatar-level" wx:if="{{userInfo.level}}">Lv.{{userInfo.level}}</view>
+        </view>
+        <view class="user-info">
+          <text class="user-name">{{userInfo.nickName || '点击登录'}}</text>
+          <view class="user-tags">
+            <view class="tag-item" wx:for="{{userTags}}" wx:key="index">
+              <text class="tag-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="sign-btn {{isSigned ? 'signed' : ''}}" bindtap="handleSign">
+          <text class="sign-icon">{{isSigned ? '✓' : '+'}}</text>
+          <text class="sign-text">{{isSigned ? '已签到' : '签到'}}</text>
+        </view>
+      </view>
+      
+      <!-- 积分和等级进度 -->
+      <view class="user-stats-card">
+        <view class="stats-main">
+          <view class="stat-block">
+            <text class="stat-value">{{userInfo.points || 0}}</text>
+            <text class="stat-label">积分</text>
+          </view>
+          <view class="stats-divider"></view>
+          <view class="stat-block">
+            <text class="stat-value">{{userInfo.days || 0}}</text>
+            <text class="stat-label">学习天数</text>
+          </view>
+          <view class="stats-divider"></view>
+          <view class="stat-block">
+            <text class="stat-value">{{userInfo.badgeCount || 0}}</text>
+            <text class="stat-label">徽章</text>
+          </view>
+        </view>
+        <view class="level-progress" wx:if="{{userInfo.nextLevel}}">
+          <view class="progress-header">
+            <text class="progress-label">升级到 Lv.{{userInfo.nextLevel}}</text>
+            <text class="progress-value">{{userInfo.currentProgress}} / {{userInfo.needProgress}}</text>
+          </view>
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{userInfo.progressPercent}}%"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="action-item" wx:for="{{quickActions}}" wx:key="id" bindtap="handleAction" data-action="{{item.action}}">
+      <view class="action-icon" style="background: {{item.bgColor}}">
+        <text>{{item.icon}}</text>
+      </view>
+      <text class="action-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stats-section">
+    <view class="section-title">学习数据</view>
+    <view class="stats-grid">
+      <view class="stat-card" wx:for="{{learningStats}}" wx:key="id">
+        <view class="stat-icon-wrapper" style="background: {{item.color}}20">
+          <text class="stat-icon" style="color: {{item.color}}">{{item.icon}}</text>
+        </view>
+        <text class="stat-num">{{item.value}}</text>
+        <text class="stat-name">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="section-title">我的服务</view>
+    <view class="menu-list">
+      <view class="menu-group" wx:for="{{menuGroups}}" wx:key="title">
+        <view class="menu-group-title">{{item.title}}</view>
+        <view class="menu-items">
+          <view class="menu-item" wx:for="{{item.items}}" wx:key="id" wx:for-item="menuItem" bindtap="handleMenu" data-url="{{menuItem.url}}">
+            <view class="menu-left">
+              <view class="menu-icon-wrapper" style="background: {{menuItem.color}}15">
+                <text class="menu-icon" style="color: {{menuItem.color}}">{{menuItem.icon}}</text>
+              </view>
+              <text class="menu-name">{{menuItem.name}}</text>
+            </view>
+            <view class="menu-right">
+              <text class="menu-extra" wx:if="{{menuItem.extra}}">{{menuItem.extra}}</text>
+              <text class="menu-arrow">></text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view class="safe-bottom"></view>
+</view>

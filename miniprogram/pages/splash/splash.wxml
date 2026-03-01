@@ -1,0 +1,40 @@
+<view class="splash-container">
+  <!-- 背景 -->
+  <view class="bg-gradient"></view>
+  
+  <!-- Logo区域 -->
+  <view class="logo-section">
+    <view class="logo-icon">🛡️</view>
+    <view class="app-name">{{appName}}</view>
+    <view class="slogan">珍爱生命 · 远离毒品</view>
+  </view>
+  
+  <!-- 数据冲击区域 -->
+  <view class="impact-section" wx:if="{{showImpact}}">
+    <view class="impact-box">
+      <view class="impact-text">在你阅读这句话的时间里</view>
+      <view class="impact-number">
+        又有 <text class="highlight">{{impactNumber}}</text> 个家庭
+      </view>
+      <view class="impact-text">因毒品支离破碎...</view>
+    </view>
+  </view>
+  
+  <!-- 加载进度 -->
+  <view class="loading-section">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{progress}}%"></view>
+    </view>
+    <view class="loading-text">正在加载资源...</view>
+  </view>
+  
+  <!-- 访问人数 -->
+  <view class="visit-count">
+    已有 <text class="count">{{visitCount}}</text> 人参观
+  </view>
+  
+  <!-- 底部信息 -->
+  <view class="footer">
+    <view class="org-name">{{orgName}} 出品</view>
+  </view>
+</view>

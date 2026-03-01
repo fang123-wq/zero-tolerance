@@ -1,0 +1,39 @@
+<view class="container">
+  <swiper 
+    class="image-swiper" 
+    indicator-dots="{{true}}" 
+    indicator-color="rgba(0,0,0,0.3)"
+    indicator-active-color="#1a237e"
+    current="{{currentIndex}}"
+    bindchange="onSwiperChange"
+    circular="{{true}}"
+  >
+    <swiper-item wx:for="{{images}}" wx:key="index">
+      <image 
+        class="browse-image" 
+        src="{{item.url}}" 
+        mode="widthFix"
+        bindtap="previewImage"
+        data-index="{{index}}"
+      />
+    </swiper-item>
+  </swiper>
+  
+  <view class="page-indicator">
+    <text>{{currentIndex + 1}} / {{images.length}}</text>
+  </view>
+  
+  <view class="thumbnail-list">
+    <scroll-view scroll-x="{{true}}" class="thumbnail-scroll">
+      <view 
+        wx:for="{{images}}" 
+        wx:key="index" 
+        class="thumbnail-item {{currentIndex === index ? 'active' : ''}}"
+        bindtap="goToImage"
+        data-index="{{index}}"
+      >
+        <image src="{{item.url}}" mode="aspectFill" />
+      </view>
+    </scroll-view>
+  </view>
+</view>

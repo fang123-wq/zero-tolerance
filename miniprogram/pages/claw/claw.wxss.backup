@@ -1,0 +1,452 @@
+/* pages/claw/claw.wxss */
+page {
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景图 */
+.bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* 顶部信息栏 */
+.header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2rpx 2rpx 4rpx rgba(0,0,0,0.3);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.25);
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+}
+
+.points-label {
+  font-size: 24rpx;
+  color: #fff;
+  margin-right: 10rpx;
+}
+
+.points-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+/* 娃娃机区域 */
+.machine-area {
+  position: relative;
+  z-index: 5;
+  height: 420rpx;
+  margin: 20rpx;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20rpx;
+  border: 4rpx solid rgba(255,255,255,0.3);
+  overflow: hidden;
+}
+
+/* 爪子轨道 */
+.claw-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.claw-wrapper {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: left 0.1s ease-out;
+}
+
+/* 爪子绳索 */
+.claw-rope {
+  width: 6rpx;
+  background: linear-gradient(180deg, #666, #888);
+  border-radius: 3rpx;
+}
+
+/* 爪子 */
+.claw {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+.claw-body {
+  width: 30rpx;
+  height: 40rpx;
+  background: linear-gradient(180deg, #ff6b6b, #ee5a5a);
+  border-radius: 8rpx 8rpx 4rpx 4rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0,0,0,0.3);
+}
+
+.claw-arm {
+  width: 10rpx;
+  height: 50rpx;
+  background: linear-gradient(180deg, #ff8a8a, #ff6b6b);
+  border-radius: 5rpx;
+  transition: transform 0.3s ease;
+  transform-origin: top center;
+}
+
+.claw-arm.left {
+  transform: rotate(-35deg);
+}
+
+.claw-arm.right {
+  transform: rotate(35deg);
+}
+
+.claw.closed .claw-arm.left {
+  transform: rotate(-8deg);
+}
+
+.claw.closed .claw-arm.right {
+  transform: rotate(8deg);
+}
+
+/* 抓到的娃娃 */
+.grabbed-doll {
+  width: 80rpx;
+  height: 80rpx;
+  margin-top: -10rpx;
+}
+
+/* 娃娃堆 */
+.dolls-pile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+}
+
+.doll-item {
+  position: absolute;
+  width: 90rpx;
+  height: 90rpx;
+}
+
+/* 控制区域 */
+.control-area {
+  position: relative;
+  z-index: 10;
+  padding: 20rpx 30rpx;
+}
+
+.slider-box {
+  background: rgba(0,0,0,0.3);
+  padding: 20rpx 30rpx;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.slider-label {
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  color: #fff;
+  margin-bottom: 10rpx;
+}
+
+.position-slider {
+  margin: 0;
+}
+
+.btn-area {
+  text-align: center;
+}
+
+.grab-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 24rpx 80rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 8rpx 20rpx rgba(238,90,90,0.4);
+}
+
+.grab-btn.disabled {
+  background: #999;
+  box-shadow: none;
+}
+
+.grab-btn::after {
+  border: none;
+}
+
+.btn-text {
+  font-weight: bold;
+}
+
+.btn-cost {
+  font-size: 24rpx;
+  margin-left: 15rpx;
+  opacity: 0.9;
+}
+
+.points-tip {
+  margin-top: 15rpx;
+  padding: 12rpx 24rpx;
+  background: rgba(255,215,0,0.9);
+  border-radius: 20rpx;
+  display: inline-block;
+  font-size: 24rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.game-info {
+  margin-top: 15rpx;
+  text-align: center;
+  color: rgba(255,255,255,0.9);
+  font-size: 24rpx;
+}
+
+.guarantee-tip {
+  display: block;
+  margin-top: 5rpx;
+  color: #ffd700;
+}
+
+/* 奖品柜 */
+.prize-cabinet {
+  position: relative;
+  z-index: 10;
+  margin: 20rpx;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20rpx;
+  padding: 20rpx;
+}
+
+.cabinet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.cabinet-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.cabinet-action {
+  color: #ff6b6b;
+  font-size: 24rpx;
+}
+
+.cabinet-grid {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cabinet-item {
+  text-align: center;
+}
+
+.item-box {
+  width: 100rpx;
+  height: 100rpx;
+  background: #f5f5f5;
+  border-radius: 15rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8rpx;
+}
+
+.item-box.empty {
+  opacity: 0.4;
+}
+
+.item-img {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.item-count {
+  font-size: 22rpx;
+  color: #666;
+  font-weight: bold;
+}
+
+/* 弹窗 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.modal.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 30rpx;
+  text-align: center;
+}
+
+.modal-header.win {
+  background: linear-gradient(135deg, #ffd700, #ffb300);
+}
+
+.modal-header.lose {
+  background: #9e9e9e;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.modal-body {
+  padding: 30rpx;
+  text-align: center;
+}
+
+.prize-display {
+  margin-bottom: 20rpx;
+}
+
+.prize-img {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+.prize-name {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.prize-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.lose-text {
+  display: block;
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.lose-tip {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 20rpx;
+}
+
+.guarantee-info {
+  background: #fff3e0;
+  padding: 15rpx 20rpx;
+  border-radius: 10rpx;
+  font-size: 24rpx;
+  color: #ff9800;
+}
+
+.modal-footer {
+  display: flex;
+  padding: 20rpx 30rpx 30rpx;
+  gap: 20rpx;
+}
+
+.btn-secondary, .btn-primary {
+  flex: 1;
+  padding: 20rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  color: #fff;
+}
+
+.btn-secondary::after, .btn-primary::after {
+  border: none;
+}
+
+.btn-primary[disabled] {
+  background: #ccc;
+  color: #999;
+}

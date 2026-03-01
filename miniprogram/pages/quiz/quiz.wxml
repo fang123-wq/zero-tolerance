@@ -1,0 +1,91 @@
+<view class="container">
+  <!-- 成绩卡片 -->
+  <view class="score-card">
+    <view class="score-item">
+      <text class="score-value">{{totalPoints}}</text>
+      <text class="score-label">总积分</text>
+    </view>
+    <view class="score-divider"></view>
+    <view class="score-item">
+      <text class="score-value">{{correctRate}}%</text>
+      <text class="score-label">正确率</text>
+    </view>
+    <view class="score-divider"></view>
+    <view class="score-item">
+      <text class="score-value">第{{rank}}名</text>
+      <text class="score-label">排名</text>
+    </view>
+  </view>
+
+  <!-- 答题模式 -->
+  <view class="section" wx:if="{{!isQuizzing}}">
+    <view class="section-title">答题模式</view>
+    <view class="mode-grid">
+      <view class="mode-card" bindtap="startQuiz" data-mode="daily">
+        <text class="mode-icon">📚</text>
+        <text class="mode-name">每日答题</text>
+        <text class="mode-desc">每日5题</text>
+        <text class="mode-points">+50积分</text>
+      </view>
+      <view class="mode-card" bindtap="startQuiz" data-mode="challenge">
+        <text class="mode-icon">⚡</text>
+        <text class="mode-name">限时挑战</text>
+        <text class="mode-desc">60秒10题</text>
+        <text class="mode-points">+100积分</text>
+      </view>
+      <view class="mode-card" bindtap="startQuiz" data-mode="practice">
+        <text class="mode-icon">🎯</text>
+        <text class="mode-name">专项练习</text>
+        <text class="mode-desc">分类刷题</text>
+        <text class="mode-points">巩固知识</text>
+      </view>
+      <view class="mode-card disabled">
+        <text class="mode-icon">🏆</text>
+        <text class="mode-name">排位赛</text>
+        <text class="mode-desc">敬请期待</text>
+        <text class="mode-points">实时对战</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 答题界面 -->
+  <view class="quiz-panel" wx:if="{{isQuizzing}}">
+    <view class="quiz-header">
+      <text class="quiz-progress">第{{currentIndex + 1}}/{{quizQuestions.length}}题</text>
+      <text class="quiz-timer" wx:if="{{quizMode === 'challenge'}}">⏱️ {{timeLeft}}秒</text>
+    </view>
+    
+    <view class="question-card">
+      <text class="question-text">{{currentQuestion.question}}</text>
+    </view>
+    
+    <view class="options-list">
+      <view class="option-item {{selectedOption === index ? (showAnswer ? (index === currentQuestion.answer ? 'correct' : 'wrong') : 'selected') : ''}} {{showAnswer && index === currentQuestion.answer ? 'correct' : ''}}"
+            wx:for="{{currentQuestion.options}}" wx:key="index"
+            bindtap="selectOption" data-index="{{index}}">
+        <text class="option-text">{{item}}</text>
+      </view>
+    </view>
+    
+    <view class="answer-explanation" wx:if="{{showAnswer}}">
+      <text class="explanation-title">{{selectedOption === currentQuestion.answer ? '✓ 回答正确' : '✗ 回答错误'}}</text>
+      <text class="explanation-text">{{currentQuestion.explanation}}</text>
+    </view>
+    
+    <button class="btn-next" wx:if="{{showAnswer}}" bindtap="nextQuestion">
+      {{currentIndex < quizQuestions.length - 1 ? '下一题' : '查看结果'}}
+    </button>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="section" wx:if="{{!isQuizzing}}">
+    <view class="section-title">排行榜</view>
+    <view class="rank-list">
+      <view class="rank-item" wx:for="{{rankList}}" wx:key="rank">
+        <text class="rank-medal">{{item.medal}}</text>
+        <text class="rank-name">{{item.name}}</text>
+        <text class="rank-score">{{item.score}}分</text>
+      </view>
+    </view>
+  </view>
+</view>

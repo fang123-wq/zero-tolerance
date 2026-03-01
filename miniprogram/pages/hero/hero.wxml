@@ -1,0 +1,66 @@
+<view class="container">
+  <!-- 阶段1：播放开场视频 -->
+  <block wx:if="{{phase === 'intro'}}">
+    <view class="video-panel">
+      <video
+        id="heroVideo"
+        class="hero-video"
+        src="{{introVideoUrl}}"
+        autoplay
+        show-center-play-btn="{{true}}"
+        show-play-btn="{{true}}"
+        controls
+        bindended="onIntroVideoEnded"
+        binderror="onVideoError"
+      ></video>
+    </view>
+  </block>
+
+  <!-- 阶段2：选择 -->
+  <block wx:if="{{phase === 'choice'}}">
+    <view class="choice-panel">
+      <view class="choice-title">面对使命与家庭的抉择，小峰会怎么做？</view>
+      <view class="choice-options">
+        <view class="choice-btn choice-btn-1" bindtap="chooseOption" data-option="mission">
+          <text class="choice-icon">⚔️</text>
+          <text class="choice-text">坚守使命</text>
+          <text class="choice-desc">含泪奔赴任务</text>
+        </view>
+        <view class="choice-btn choice-btn-2" bindtap="chooseOption" data-option="family">
+          <text class="choice-icon">🏠</text>
+          <text class="choice-text">选择家庭</text>
+          <text class="choice-desc">留下照顾女儿</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 阶段3：播放结果视频 -->
+  <block wx:if="{{phase === 'result'}}">
+    <view class="video-panel">
+      <video
+        id="resultVideo"
+        class="hero-video"
+        src="{{resultVideoUrl}}"
+        autoplay
+        show-center-play-btn="{{true}}"
+        show-play-btn="{{true}}"
+        controls
+        bindended="onResultVideoEnded"
+        binderror="onVideoError"
+      ></video>
+    </view>
+  </block>
+
+  <!-- 阶段4：结束 -->
+  <block wx:if="{{phase === 'end'}}">
+    <view class="end-panel">
+      <view class="end-title">{{endTitle}}</view>
+      <view class="end-desc">{{endDesc}}</view>
+      <view class="end-actions">
+        <view class="restart-btn" bindtap="restart">重新体验</view>
+        <view class="back-btn" bindtap="goBack">返回</view>
+      </view>
+    </view>
+  </block>
+</view>

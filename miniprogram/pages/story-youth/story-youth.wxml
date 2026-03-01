@@ -1,0 +1,180 @@
+<view class="container">
+  <!-- 背景图片层 -->
+  <image 
+    class="scene-bg" 
+    src="{{currentScene.images ? currentScene.images[0] : ''}}"
+    mode="aspectFill"
+    wx:if="{{currentScene.images && currentScene.images[0]}}"
+  />
+  <view class="scene-bg-placeholder" wx:if="{{!currentScene.images || !currentScene.images[0]}}"></view>
+  <view class="overlay"></view>
+  
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progress}}%"></view>
+  </view>
+
+  <!-- 音乐控制按钮 -->
+  <view class="music-btn" bindtap="toggleMusic">
+    <text class="music-icon">{{musicPlaying ? '🔊' : '🔇'}}</text>
+  </view>
+
+  <!-- 视频场景 -->
+  <block wx:if="{{currentScene.type === 'video'}}">
+    <view class="video-panel">
+      <view class="scene-title video-title" wx:if="{{currentScene.title}}">{{currentScene.title}}</view>
+      <video 
+        id="storyVideo"
+        class="story-video"
+        src="{{currentScene.videoUrl}}"
+        autoplay="{{true}}"
+        show-center-play-btn="{{true}}"
+        show-play-btn="{{true}}"
+        controls="{{true}}"
+        object-fit="contain"
+        bindended="onVideoEnded"
+        binderror="onVideoError"
+      ></video>
+      <view class="video-next-btn" wx:if="{{videoEnded}}" bindtap="goToNextScene">
+        <text>继续 →</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 普通场景 -->
+  <block wx:if="{{currentScene.type === 'normal'}}">
+    <view class="scene-title" wx:if="{{currentScene.title}}">{{currentScene.title}}</view>
+    
+    <view class="scene-content" wx:if="{{currentScene.description && !showDialogue && !showFlashback && !showMessages && !showChat && !showNarration}}">
+      <view class="description-box">
+        <text class="description-text">{{displayText}}</text>
+      </view>
+      <view class="tap-hint" wx:if="{{textComplete}}" bindtap="nextStep">点击继续 →</view>
+    </view>
+
+    <view class="flashback-panel" wx:if="{{showFlashback}}">
+      <view class="flashback-title">{{currentScene.flashback.title}}</view>
+      <view class="dialogue-box">
+        <view class="character-name" wx:if="{{currentDialogue.character}}">
+          {{characters[currentDialogue.character].name || currentDialogue.character}}
+        </view>
+        <text class="dialogue-text">{{displayText}}</text>
+        <view class="dialogue-action" wx:if="{{currentDialogue.action}}">（{{currentDialogue.action}}）</view>
+      </view>
+      <view class="tap-hint" wx:if="{{textComplete}}" bindtap="nextDialogue">点击继续 →</view>
+    </view>
+
+    <view class="messages-panel" wx:if="{{showMessages}}">
+      <view class="messages-title">手机消息</view>
+      <view class="message-list">
+        <view class="message-item {{item.from === 'linye' ? 'self' : ''}}" 
+              wx:for="{{visibleMessages}}" wx:key="index"
+              style="animation-delay: {{index * 0.3}}s">
+          <view class="message-avatar">{{characters[item.from].name[0] || '?'}}</view>
+          <view class="message-content">
+            <view class="message-from">{{characters[item.from].name}} · {{item.time}}</view>
+            <view class="message-text">{{item.text}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="tap-hint" wx:if="{{messagesComplete}}" bindtap="nextStep">点击继续 →</view>
+    </view>
+
+    <view class="dialogue-panel" wx:if="{{showDialogue}}">
+      <view class="character-name" wx:if="{{currentDialogue.character}}">
+        {{characters[currentDialogue.character].name || currentDialogue.character}}
+      </view>
+      <view class="dialogue-box">
+        <text class="dialogue-text">{{displayText}}</text>
+        <view class="dialogue-action" wx:if="{{currentDialogue.action}}">（{{currentDialogue.action}}）</view>
+      </view>
+      <view class="tap-hint" wx:if="{{textComplete}}" bindtap="nextDialogue">点击继续 →</view>
+    </view>
+
+    <view class="narration-panel" wx:if="{{showNarration}}">
+      <view class="narration-box">
+        <text class="narration-text">{{displayText}}</text>
+      </view>
+      <view class="tap-hint" wx:if="{{textComplete}}" bindtap="nextStep">点击继续 →</view>
+    </view>
+
+    <view class="action-btn" wx:if="{{showButton}}" bindtap="goToNextScene">
+      <text>{{currentScene.button.text || '继续'}}</text>
+    </view>
+  </block>
+
+  <!-- 选择场景 -->
+  <block wx:if="{{currentScene.type === 'choice'}}">
+    <view class="choice-panel">
+      <view class="choice-title">{{currentScene.title}}</view>
+      <view class="choice-question">{{currentScene.question}}</view>
+      <view class="choice-desc">{{currentScene.description}}</view>
+      
+      <view class="countdown" wx:if="{{countdown > 0}}">
+        <view class="countdown-bar" style="width: {{(countdown / countdownTotal) * 100}}%"></view>
+        <text class="countdown-text">{{countdown}}s</text>
+      </view>
+      
+      <view class="choice-list">
+        <view class="choice-item" 
+              wx:for="{{currentScene.options}}" 
+              wx:key="id" 
+              bindtap="makeChoice" 
+              data-option="{{item}}">
+          <view class="choice-label" style="background: {{item.labelColor}}">{{item.label}}</view>
+          <view class="choice-main">
+            <view class="choice-text">{{item.text}}</view>
+            <view class="choice-sub">{{item.description}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 结局场景 -->
+  <block wx:if="{{currentScene.type === 'ending'}}">
+    <view class="ending-panel">
+      <view class="ending-rating">
+        <text class="stars">{{getStars(currentScene.rating)}}</text>
+        <text class="rating-text">{{currentScene.ratingText}}</text>
+      </view>
+      <view class="ending-title">{{currentScene.title}}</view>
+      
+      <view class="ending-dialogue" wx:if="{{showEndingDialogue}}">
+        <view class="dialogue-box">
+          <view class="character-name" wx:if="{{currentDialogue.character}}">
+            {{characters[currentDialogue.character].name}}
+          </view>
+          <text class="dialogue-text">{{displayText}}</text>
+        </view>
+        <view class="tap-hint" wx:if="{{textComplete}}" bindtap="nextEndingDialogue">点击继续 →</view>
+      </view>
+      
+      <view class="ending-reflection" wx:if="{{showReflection}}">
+        <text class="reflection-text">{{currentScene.reflection}}</text>
+      </view>
+      
+      <view class="ending-warning" wx:if="{{currentScene.warning && showReflection}}">
+        <text class="warning-text">{{currentScene.warning}}</text>
+      </view>
+      
+      <view class="achievement" wx:if="{{showReflection && currentScene.achievement}}">
+        <view class="achievement-icon">🏆</view>
+        <view class="achievement-info">
+          <view class="achievement-name">{{currentScene.achievement.name}}</view>
+          <view class="achievement-desc">{{currentScene.achievement.description}}</view>
+        </view>
+      </view>
+      
+      <view class="points-earned" wx:if="{{showReflection}}">
+        <text>+{{awardedPoints}} 积分</text>
+      </view>
+      
+      <view class="ending-actions" wx:if="{{showReflection}}">
+        <button class="btn-restart" bindtap="restartStory">重新体验</button>
+        <button class="btn-share" open-type="share">分享给朋友</button>
+        <button class="btn-back" bindtap="goBack">返回</button>
+      </view>
+    </view>
+  </block>
+</view>

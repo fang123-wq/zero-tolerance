@@ -1,0 +1,276 @@
+.container {
+  padding: 24rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 抓娃娃入口 */
+.claw-banner {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  box-shadow: 0 6rpx 20rpx rgba(238,90,90,0.3);
+}
+
+.claw-icon {
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 20rpx;
+  border-radius: 16rpx;
+}
+
+.claw-info {
+  flex: 1;
+}
+
+.claw-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 8rpx;
+}
+
+.claw-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 12rpx;
+}
+
+.claw-prizes {
+  display: flex;
+  gap: 10rpx;
+}
+
+.claw-prizes text {
+  font-size: 32rpx;
+}
+
+.claw-btn {
+  background: #fff;
+  padding: 16rpx 24rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  color: #ee5a5a;
+  font-weight: bold;
+  font-size: 26rpx;
+}
+
+.claw-btn .arrow {
+  margin-left: 8rpx;
+}
+
+/* 我的奖品 */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-action {
+  display: flex;
+  align-items: center;
+  color: #1a237e;
+  font-size: 26rpx;
+}
+
+.section-action .arrow {
+  margin-left: 5rpx;
+  font-size: 20rpx;
+}
+
+.prize-row {
+  display: flex;
+  gap: 20rpx;
+  background: #fff;
+  padding: 20rpx;
+  border-radius: 16rpx;
+}
+
+.prize-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80rpx;
+}
+
+.prize-item .prize-icon {
+  font-size: 48rpx;
+  margin-bottom: 6rpx;
+}
+
+.prize-item .prize-img {
+  width: 60rpx;
+  height: 60rpx;
+  margin-bottom: 6rpx;
+}
+
+.prize-item .prize-count {
+  font-size: 24rpx;
+  color: #666;
+  font-weight: bold;
+}
+
+.section {
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 24rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #1a237e;
+}
+
+/* 故事列表 */
+.story-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.story-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.story-icon {
+  font-size: 56rpx;
+  margin-right: 20rpx;
+}
+
+.story-content {
+  flex: 1;
+}
+
+.story-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.story-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.story-badge {
+  background: #4caf50;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+  margin-left: 12rpx;
+}
+
+.story-badge.new {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+}
+
+.story-subtitle {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.story-meta {
+  display: flex;
+  gap: 20rpx;
+}
+
+.meta-item {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.story-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* 游戏网格 */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.game-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-icon {
+  font-size: 48rpx;
+  margin-bottom: 12rpx;
+}
+
+.game-icon-img {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 12rpx;
+}
+
+.game-name {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.game-desc {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+/* 进度卡片 */
+.progress-card {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.progress-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.progress-label {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.8);
+  margin-top: 8rpx;
+}
+
+.progress-divider {
+  width: 2rpx;
+  height: 60rpx;
+  background: rgba(255,255,255,0.3);
+}

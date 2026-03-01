@@ -1,0 +1,11 @@
+<!-- VR全景页面 - 使用web-view加载Pannellum -->
+<web-view wx:if="{{vrUrl}}" src="{{vrUrl}}" bindmessage="onMessage" bindload="onWebViewLoad" binderror="onError"></web-view>
+
+<!-- 未配置URL时的提示 -->
+<view wx:if="{{!vrUrl}}" class="no-url">
+  <view class="tip-icon">🌐</view>
+  <view class="tip-title">VR全景功能</view>
+  <view class="tip-desc">请在配置中设置VR全景页面地址</view>
+  <view class="tip-note">需要部署vr-panorama到HTTPS服务器并配置业务域名</view>
+  <button class="back-btn" bindtap="goBack">返回</button>
+</view>

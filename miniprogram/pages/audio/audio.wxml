@@ -1,0 +1,111 @@
+<!--pages/audio/audio.wxml-->
+<wxs module="util">
+  module.exports.formatTime = function(seconds) {
+    if (!seconds || isNaN(seconds)) return '00:00';
+    var min = Math.floor(seconds / 60);
+    var sec = Math.floor(seconds % 60);
+    return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec);
+  }
+</wxs>
+
+<view class="audio-container">
+  <!-- 顶部导航 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">◀</text>
+      <text>返回</text>
+    </view>
+    <view class="title">语音导览</view>
+    <view class="list-btn" bindtap="togglePlaylist">
+      <text>📋</text>
+    </view>
+  </view>
+
+  <!-- 封面区域 -->
+  <view class="cover-area">
+    <view class="cover-bg"></view>
+    <view class="cover-content">
+      <text class="cover-icon">🎧</text>
+      <text class="cover-zone">{{currentAudio.zoneName || '禁毒知识'}}</text>
+    </view>
+  </view>
+
+  <!-- 内容展示区 -->
+  <view class="content-area">
+    <!-- 标题 -->
+    <view class="audio-title">
+      <text class="title-number">{{currentAudio.number || '01'}}</text>
+      <text class="title-text">{{currentAudio.title || '加载中...'}}</text>
+    </view>
+
+    <!-- 讲解文字 -->
+    <scroll-view class="transcript-scroll" scroll-y>
+      <view class="transcript-section">
+        <view class="section-label">【讲解内容】</view>
+        <text class="transcript-text">{{currentAudio.transcript || '暂无讲解内容'}}</text>
+      </view>
+
+      <!-- 知识要点 -->
+      <view class="keypoints-section" wx:if="{{currentAudio.keyPoints && currentAudio.keyPoints.length > 0}}">
+        <view class="section-label">▼ 知识要点</view>
+        <view class="keypoints-list">
+          <view class="keypoint-item" wx:for="{{currentAudio.keyPoints}}" wx:key="*this">
+            <text class="keypoint-dot">•</text>
+            <text class="keypoint-text">{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 播放控制区 -->
+  <view class="player-control">
+    <!-- 进度条 -->
+    <view class="progress-bar">
+      <text class="time-text">{{util.formatTime(currentTime)}}</text>
+      <slider class="progress-slider" min="0" max="{{duration}}" value="{{currentTime}}" activeColor="#1890ff" backgroundColor="rgba(255,255,255,0.3)" block-size="12" bindchange="onSliderChange" bindchanging="onSliderChanging"></slider>
+      <text class="time-text">{{util.formatTime(duration)}}</text>
+    </view>
+
+    <!-- 控制按钮 -->
+    <view class="control-buttons">
+      <view class="control-btn" bindtap="playPrev">
+        <text class="btn-icon">⏮️</text>
+        <text class="btn-label">上一个</text>
+      </view>
+      <view class="control-btn play-btn" bindtap="togglePlay">
+        <text class="btn-icon large">{{isPlaying ? '⏸️' : '▶️'}}</text>
+      </view>
+      <view class="control-btn" bindtap="playNext">
+        <text class="btn-icon">⏭️</text>
+        <text class="btn-label">下一个</text>
+      </view>
+      <view class="control-btn {{autoNext ? 'active' : ''}}" bindtap="toggleAutoNext">
+        <text class="btn-icon">🔄</text>
+        <text class="btn-label">连续</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 播放列表弹窗 -->
+  <view class="playlist-modal {{showPlaylist ? 'show' : ''}}" bindtap="togglePlaylist">
+    <view class="playlist-content" catchtap="stopPropagation">
+      <view class="playlist-header">
+        <text class="playlist-title">播放列表</text>
+        <view class="playlist-close" bindtap="togglePlaylist">✕</view>
+      </view>
+      <scroll-view class="playlist-scroll" scroll-y>
+        <view class="playlist-item {{currentIndex === index ? 'active' : ''}} {{listenedList[item.id] ? 'listened' : ''}}" wx:for="{{audioList}}" wx:key="id" data-index="{{index}}" bindtap="onPlaylistItemTap">
+          <text class="item-status">{{currentIndex === index ? '▶️' : (listenedList[item.id] ? '✓' : '🎵')}}</text>
+          <text class="item-number">{{item.number}}</text>
+          <text class="item-title">{{item.title}}</text>
+          <text class="item-duration">{{util.formatTime(item.duration)}}</text>
+        </view>
+      </scroll-view>
+      <view class="playlist-footer">
+        <text>总时长：{{util.formatTime(totalDuration)}}</text>
+        <text>已听：{{listenedCount}}/{{audioList.length}}</text>
+      </view>
+    </view>
+  </view>
+</view>

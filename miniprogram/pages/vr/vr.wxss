@@ -1,0 +1,428 @@
+/* pages/vr/vr.wxss */
+.vr-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 顶部导航栏 */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 88rpx;
+  padding-top: env(safe-area-inset-top);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  z-index: 100;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 28rpx;
+  padding: 10rpx 20rpx;
+}
+
+.back-icon {
+  margin-right: 8rpx;
+}
+
+.title {
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.help-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 32rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+/* 全景图区域 */
+.panorama-area {
+  flex: 1;
+  width: 100%;
+  margin-top: calc(88rpx + env(safe-area-inset-top));
+  margin-bottom: 200rpx;
+}
+
+.panorama-view {
+  height: 100%;
+}
+
+.panorama-image {
+  height: 100%;
+  width: auto;
+}
+
+/* 热点样式 - 科技风格 */
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 50;
+}
+
+/* 导航箭头 - 科技风格 */
+.hotspot-navigation .hotspot-arrow {
+  width: 100rpx;
+  height: 100rpx;
+  background: rgba(0, 212, 255, 0.15);
+  border: 3rpx solid #00d4ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00d4ff;
+  font-size: 48rpx;
+  font-weight: bold;
+  box-shadow: 0 0 30rpx rgba(0, 212, 255, 0.6), 
+              0 0 60rpx rgba(0, 212, 255, 0.3),
+              inset 0 0 20rpx rgba(0, 212, 255, 0.2);
+  animation: techPulse 2s ease-in-out infinite;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes techPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 30rpx rgba(0, 212, 255, 0.6), 
+                0 0 60rpx rgba(0, 212, 255, 0.3),
+                inset 0 0 20rpx rgba(0, 212, 255, 0.2);
+  }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 40rpx rgba(0, 212, 255, 0.8), 
+                0 0 80rpx rgba(0, 212, 255, 0.5),
+                inset 0 0 30rpx rgba(0, 212, 255, 0.3);
+  }
+}
+
+.hotspot-navigation.arrow-left .hotspot-arrow {
+  border-color: #00ff88;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.15);
+  box-shadow: 0 0 30rpx rgba(0, 255, 136, 0.6), 
+              0 0 60rpx rgba(0, 255, 136, 0.3),
+              inset 0 0 20rpx rgba(0, 255, 136, 0.2);
+}
+
+.hotspot-navigation.arrow-back .hotspot-arrow {
+  border-color: #ff9500;
+  color: #ff9500;
+  background: rgba(255, 149, 0, 0.15);
+  box-shadow: 0 0 30rpx rgba(255, 149, 0, 0.6), 
+              0 0 60rpx rgba(255, 149, 0, 0.3),
+              inset 0 0 20rpx rgba(255, 149, 0, 0.2);
+}
+
+.hotspot-label {
+  margin-top: 12rpx;
+  padding: 8rpx 20rpx;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1rpx solid rgba(0, 212, 255, 0.5);
+  border-radius: 8rpx;
+  color: #00d4ff;
+  font-size: 24rpx;
+  white-space: nowrap;
+  text-shadow: 0 0 10rpx rgba(0, 212, 255, 0.5);
+  letter-spacing: 2rpx;
+}
+
+/* 信息点 - 科技风格 */
+.hotspot-info .hotspot-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(138, 43, 226, 0.2);
+  border: 3rpx solid #8a2be2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a2be2;
+  font-size: 36rpx;
+  font-weight: bold;
+  box-shadow: 0 0 25rpx rgba(138, 43, 226, 0.6),
+              0 0 50rpx rgba(138, 43, 226, 0.3),
+              inset 0 0 15rpx rgba(138, 43, 226, 0.2);
+  animation: infoPulse 2.5s ease-in-out infinite;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes infoPulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+/* 链接点 - 科技风格 */
+.hotspot-link .hotspot-icon {
+  width: 90rpx;
+  height: 90rpx;
+  background: rgba(255, 0, 128, 0.15);
+  border: 3rpx solid #ff0080;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  box-shadow: 0 0 30rpx rgba(255, 0, 128, 0.6),
+              0 0 60rpx rgba(255, 0, 128, 0.3),
+              inset 0 0 20rpx rgba(255, 0, 128, 0.2);
+  animation: linkPulse 1.8s ease-in-out infinite;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes linkPulse {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+  }
+  50% { 
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+/* 热点外圈扫描动画 */
+.hotspot::before {
+  content: '';
+  position: absolute;
+  width: 140rpx;
+  height: 140rpx;
+  border: 2rpx solid rgba(0, 212, 255, 0.3);
+  border-radius: 50%;
+  animation: scanRing 3s linear infinite;
+}
+
+@keyframes scanRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.hotspot-info::before {
+  border-color: rgba(138, 43, 226, 0.3);
+}
+
+.hotspot-link::before {
+  border-color: rgba(255, 0, 128, 0.3);
+}
+
+/* 场景导航 */
+.scene-nav {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 80rpx);
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.scene-scroll {
+  white-space: nowrap;
+  padding: 0 20rpx;
+}
+
+.scene-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 16rpx;
+  padding: 10rpx;
+  border-radius: 12rpx;
+  background: rgba(0,0,0,0.6);
+  border: 2rpx solid transparent;
+}
+
+.scene-item.active {
+  background: rgba(24,144,255,0.3);
+  border-color: #1890ff;
+}
+
+.scene-thumb {
+  width: 100rpx;
+  height: 60rpx;
+  border-radius: 8rpx;
+}
+
+.scene-name {
+  font-size: 20rpx;
+  color: #fff;
+  margin-top: 6rpx;
+  max-width: 100rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 提示栏 */
+.tip-bar {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  padding: 12rpx 24rpx;
+  border-radius: 30rpx;
+  z-index: 100;
+}
+
+.tip-bar text {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.modal-content {
+  width: 85%;
+  max-width: 600rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  width: 50rpx;
+  height: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #999;
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.modal-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.modal-footer {
+  padding: 20rpx 30rpx 30rpx;
+}
+
+.modal-btn {
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1890ff, #096dd9);
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+}
+
+/* 帮助弹窗 */
+.help-body {
+  padding: 20rpx 30rpx;
+}
+
+.help-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.help-item:last-child {
+  border-bottom: none;
+}
+
+.help-icon {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+  width: 50rpx;
+  text-align: center;
+}
+
+/* 加载层 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+.loading-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 6rpx solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: #fff;
+  font-size: 28rpx;
+  margin-top: 20rpx;
+}

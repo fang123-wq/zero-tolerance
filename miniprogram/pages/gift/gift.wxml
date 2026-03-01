@@ -1,0 +1,91 @@
+<view class="container">
+  <!-- 积分显示 -->
+  <view class="points-card">
+    <view class="points-info">
+      <text class="points-label">我的积分</text>
+      <text class="points-value">{{points}}</text>
+    </view>
+    <view class="points-tip">完成任务可获得更多积分</view>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tabs">
+    <view class="tab {{activeTab === 'gifts' ? 'active' : ''}}" bindtap="switchTab" data-tab="gifts">礼品兑换</view>
+    <view class="tab {{activeTab === 'records' ? 'active' : ''}}" bindtap="switchTab" data-tab="records">兑换记录</view>
+  </view>
+
+  <!-- 礼品列表 -->
+  <view class="gift-section" wx:if="{{activeTab === 'gifts'}}">
+    <view class="loading" wx:if="{{loading}}">加载中...</view>
+    <view class="gift-grid" wx:else>
+      <view class="gift-item" wx:for="{{gifts}}" wx:key="id" bindtap="onGiftTap" data-gift="{{item}}">
+        <image class="gift-image" src="{{item.image}}" mode="aspectFill" wx:if="{{item.image}}"></image>
+        <view class="gift-icon" wx:else>{{item.icon}}</view>
+        <view class="gift-info">
+          <text class="gift-name">{{item.name}}</text>
+          <text class="gift-points">{{item.points}}积分</text>
+          <text class="gift-stock" wx:if="{{item.stock >= 0}}">库存: {{item.stock}}</text>
+        </view>
+        <view class="gift-btn {{points >= item.points && item.stock !== 0 ? '' : 'disabled'}}">
+          <text wx:if="{{item.stock === 0}}">已售罄</text>
+          <text wx:elif="{{points < item.points}}">积分不足</text>
+          <text wx:else>兑换</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{!loading && gifts.length === 0}}">暂无礼品</view>
+  </view>
+
+  <!-- 兑换记录 -->
+  <view class="records-section" wx:if="{{activeTab === 'records'}}">
+    <view class="record-item" wx:for="{{exchangeRecords}}" wx:key="id">
+      <image class="record-image" src="{{item.giftImage}}" mode="aspectFill" wx:if="{{item.giftImage}}"></image>
+      <view class="record-info">
+        <text class="record-name">{{item.giftName}}</text>
+        <text class="record-points">-{{item.points}}积分</text>
+        <text class="record-status status-{{item.status}}">
+          <block wx:if="{{item.status === 'pending'}}">待处理</block>
+          <block wx:elif="{{item.status === 'processing'}}">处理中</block>
+          <block wx:elif="{{item.status === 'completed'}}">已完成</block>
+          <block wx:elif="{{item.status === 'cancelled'}}">已取消</block>
+        </text>
+      </view>
+    </view>
+    <view class="empty" wx:if="{{exchangeRecords.length === 0}}">暂无兑换记录</view>
+  </view>
+
+  <!-- 兑换弹窗 -->
+  <view class="modal-overlay" wx:if="{{showExchangeModal}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">确认兑换</text>
+        <view class="modal-close" bindtap="closeModal">×</view>
+      </view>
+      <view class="modal-body">
+        <view class="exchange-gift">
+          <image class="exchange-image" src="{{selectedGift.image}}" mode="aspectFill" wx:if="{{selectedGift.image}}"></image>
+          <view class="exchange-info">
+            <text class="exchange-name">{{selectedGift.name}}</text>
+            <text class="exchange-points">{{selectedGift.points}}积分</text>
+          </view>
+        </view>
+        <view class="form-group">
+          <text class="form-label">联系人 *</text>
+          <input class="form-input" placeholder="请输入联系人姓名" value="{{contactName}}" bindinput="onInputChange" data-field="contactName"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">联系电话 *</text>
+          <input class="form-input" type="number" placeholder="请输入联系电话" value="{{contactPhone}}" bindinput="onInputChange" data-field="contactPhone"/>
+        </view>
+        <view class="form-group">
+          <text class="form-label">收货地址</text>
+          <textarea class="form-textarea" placeholder="请输入收货地址（选填）" value="{{address}}" bindinput="onInputChange" data-field="address"></textarea>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <view class="btn-cancel" bindtap="closeModal">取消</view>
+        <view class="btn-confirm" bindtap="confirmExchange">确认兑换</view>
+      </view>
+    </view>
+  </view>
+</view>

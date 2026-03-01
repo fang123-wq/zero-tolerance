@@ -1,0 +1,235 @@
+// pages/claw/claw.js
+const { clawMachineConfig, drawPrize } = require('../../data/clawConfig.js');
+const { storage } = require('../../utils/storage.js');
+const app = getApp();
+
+Page({
+  data: {
+    config: clawMachineConfig,
+    userPoints: 0,
+    clawPosition: 50,
+    ropeHeight: 20,
+    clawClosed: false,
+    isGrabbing: false,
+    showGrabbed: false,
+    grabbedPrize: null,
+    displayPrizes: [],
+    myPrizes: {},
+    todayPlays: 0,
+    consecutiveFails: 0,
+    showWinModal: false,
+    showLoseModal: false,
+    wonPrize: {}
+  },
+
+  onLoad() {
+    this.initDisplayPrizes();
+    this.loadUserData();
+  },
+
+  onShow() {
+    this.loadUserData();
+  },
+
+  // 初始化展示的娃娃堆
+  initDisplayPrizes() {
+    const prizes = [];
+    const config = clawMachineConfig;
+    for (let i = 0; i < 12; i++) {
+      const prize = config.prizes[Math.floor(Math.random() * config.prizes.length)];
+      prizes.push({
+        image: prize.image,
+        x: 5 + Math.random() * 75,
+        y: 20 + Math.random() * 60,
+        rotate: -20 + Math.random() * 40
+      });
+    }
+    this.setData({ displayPrizes: prizes });
+  },
+
+  // 加载用户数据
+  loadUserData() {
+    // 积分从 app.globalData 或 storage 的 'points' 获取
+    const userPoints = app.globalData.points || wx.getStorageSync('points') || 0;
+    const clawData = storage.get('clawData') || {
+      todayPlays: 0,
+      consecutiveFails: 0,
+      lastPlayDate: '',
+      prizes: {}
+    };
+    
+    const today = new Date().toISOString().split('T')[0];
+    if (clawData.lastPlayDate !== today) {
+      clawData.todayPlays = 0;
+      clawData.lastPlayDate = today;
+      storage.set('clawData', clawData);
+    }
+
+    this.setData({
+      userPoints,
+      todayPlays: clawData.todayPlays,
+      consecutiveFails: clawData.consecutiveFails,
+      myPrizes: clawData.prizes || {}
+    });
+  },
+
+  // 滑块拖动中
+  onSliderChanging(e) {
+    if (this.data.isGrabbing) return;
+    this.setData({ clawPosition: e.detail.value });
+  },
+
+  // 滑块改变完成
+  onSliderChange(e) {
+    if (this.data.isGrabbing) return;
+    this.setData({ clawPosition: e.detail.value });
+  },
+
+  // 阻止页面滚动
+  stopTouchMove() {
+    return false;
+  },
+
+  // 开始抓取
+  startGrab() {
+    const { userPoints, todayPlays, isGrabbing } = this.data;
+    const config = clawMachineConfig;
+
+    if (isGrabbing) return;
+    if (userPoints < config.costPerPlay) {
+      wx.showToast({ title: '积分不足', icon: 'none' });
+      return;
+    }
+    if (todayPlays >= config.dailyLimit) {
+      wx.showToast({ title: '今日次数已用完', icon: 'none' });
+      return;
+    }
+
+    const newPoints = userPoints - config.costPerPlay;
+    app.globalData.points = newPoints;
+    wx.setStorageSync('points', newPoints);
+
+    this.setData({ 
+      isGrabbing: true,
+      userPoints: newPoints,
+      grabbedPrize: null,
+      showGrabbed: false
+    });
+
+    this.runGrabAnimation();
+  },
+
+  // 抓取动画序列
+  runGrabAnimation() {
+    const config = clawMachineConfig;
+    let clawData = storage.get('clawData') || {
+      todayPlays: 0,
+      consecutiveFails: 0,
+      lastPlayDate: new Date().toISOString().split('T')[0],
+      prizes: {}
+    };
+
+    // 判定是否中奖
+    let isWin = false;
+    if (clawData.consecutiveFails >= config.guaranteeAfterFails) {
+      isWin = true;
+    } else {
+      isWin = Math.random() < config.baseWinRate;
+    }
+
+    const wonPrize = isWin ? drawPrize(config.prizes) : null;
+
+    // 阶段1: 爪子下降
+    this.animateRope(200, 600);
+
+    // 阶段2: 爪子闭合
+    setTimeout(() => {
+      this.setData({ clawClosed: true });
+      if (isWin) {
+        this.setData({ grabbedPrize: wonPrize, showGrabbed: true });
+      }
+    }, 700);
+
+    // 阶段3: 爪子上升
+    setTimeout(() => {
+      this.animateRope(20, 500);
+    }, 1000);
+
+    // 阶段4: 显示结果
+    setTimeout(() => {
+      this.setData({ 
+        clawClosed: false,
+        isGrabbing: false,
+        showGrabbed: false
+      });
+
+      clawData.todayPlays++;
+      
+      if (isWin) {
+        clawData.consecutiveFails = 0;
+        clawData.prizes[wonPrize.id] = (clawData.prizes[wonPrize.id] || 0) + 1;
+        this.setData({
+          showWinModal: true,
+          wonPrize: wonPrize,
+          myPrizes: clawData.prizes,
+          consecutiveFails: 0
+        });
+      } else {
+        clawData.consecutiveFails++;
+        this.setData({
+          showLoseModal: true,
+          consecutiveFails: clawData.consecutiveFails
+        });
+      }
+
+      this.setData({ todayPlays: clawData.todayPlays });
+      storage.set('clawData', clawData);
+    }, 1800);
+  },
+
+  // 绳索动画
+  animateRope(targetHeight, duration) {
+    const startHeight = this.data.ropeHeight;
+    const diff = targetHeight - startHeight;
+    const steps = 20;
+    const stepDuration = duration / steps;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      const easeProgress = 1 - Math.pow(1 - progress, 3);
+      const currentHeight = startHeight + diff * easeProgress;
+      this.setData({ ropeHeight: currentHeight });
+      
+      if (step >= steps) {
+        clearInterval(timer);
+        this.setData({ ropeHeight: targetHeight });
+      }
+    }, stepDuration);
+  },
+
+  playAgain() {
+    this.closeModal();
+    setTimeout(() => this.startGrab(), 300);
+  },
+
+  closeModal() {
+    this.setData({ showWinModal: false, showLoseModal: false });
+  },
+
+  goToExchange() {
+    wx.showToast({ title: '兑换功能开发中', icon: 'none' });
+  },
+
+  // 领取测试积分
+  getTestPoints() {
+    const newPoints = this.data.userPoints + 500;
+    app.globalData.points = newPoints;
+    wx.setStorageSync('points', newPoints);
+    this.setData({ userPoints: newPoints });
+    wx.showToast({ title: '获得500积分', icon: 'success' });
+  },
+
+  preventMove() {}
+});

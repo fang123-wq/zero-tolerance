@@ -1,0 +1,152 @@
+<!--pages/claw/claw.wxml-->
+<view class="container">
+  <!-- 背景图 -->
+  <image class="bg-image" src="{{config.backgroundImage}}" mode="aspectFill"></image>
+  
+  <!-- 顶部信息栏 -->
+  <view class="header">
+    <view class="header-left">
+      <text class="title">抓娃娃机</text>
+    </view>
+    <view class="header-right">
+      <text class="points-label">积分</text>
+      <text class="points-value">{{userPoints}}</text>
+    </view>
+  </view>
+
+  <!-- 娃娃机玻璃区域 -->
+  <view class="machine-area">
+    <!-- 爪子轨道 -->
+    <view class="claw-track">
+      <view class="claw-wrapper" style="left: {{clawPosition}}%;">
+        <!-- 爪子绳索 -->
+        <view class="claw-rope" style="height: {{ropeHeight}}rpx;"></view>
+        <!-- 爪子 -->
+        <view class="claw {{clawClosed ? 'closed' : ''}}">
+          <view class="claw-arm left"></view>
+          <view class="claw-body"></view>
+          <view class="claw-arm right"></view>
+        </view>
+        <!-- 抓到的娃娃 -->
+        <image wx:if="{{grabbedPrize && showGrabbed}}" 
+               class="grabbed-doll" 
+               src="{{grabbedPrize.image}}" 
+               mode="aspectFit"></image>
+      </view>
+    </view>
+    
+    <!-- 娃娃堆 -->
+    <view class="dolls-pile">
+      <image wx:for="{{displayPrizes}}" wx:key="index"
+             class="doll-item"
+             src="{{item.image}}"
+             mode="aspectFit"
+             style="left: {{item.x}}%; top: {{item.y}}%; transform: rotate({{item.rotate}}deg);"></image>
+    </view>
+  </view>
+
+  <!-- 控制区域 -->
+  <view class="control-area">
+    <!-- 位置滑块 -->
+    <view class="slider-box" catchtouchmove="stopTouchMove">
+      <text class="slider-label">◀ 移动爪子 ▶</text>
+      <slider class="position-slider" 
+              min="10" max="90" value="{{clawPosition}}" 
+              activeColor="#ff6b6b" 
+              backgroundColor="rgba(255,255,255,0.3)"
+              block-size="28"
+              block-color="#fff"
+              bindchanging="onSliderChanging"
+              bindchange="onSliderChange"
+              disabled="{{isGrabbing}}"/>
+    </view>
+    
+    <!-- 抓取按钮 -->
+    <view class="btn-area">
+      <button class="grab-btn {{isGrabbing || userPoints < config.costPerPlay ? 'disabled' : ''}}" 
+              bindtap="startGrab" 
+              disabled="{{isGrabbing || userPoints < config.costPerPlay}}">
+        <text class="btn-text">{{isGrabbing ? '抓取中...' : '抓！'}}</text>
+        <text class="btn-cost">-{{config.costPerPlay}}积分</text>
+      </button>
+      <!-- 积分不足提示 -->
+      <view class="points-tip" wx:if="{{userPoints < config.costPerPlay}}" bindtap="getTestPoints">
+        <text>积分不足，点击领取500测试积分</text>
+      </view>
+    </view>
+    
+    <!-- 游戏信息 -->
+    <view class="game-info">
+      <text>今日: {{config.dailyLimit - todayPlays}}/{{config.dailyLimit}}次</text>
+      <text wx:if="{{consecutiveFails > 0}}" class="guarantee-tip">
+        连续{{consecutiveFails}}次未中 ({{config.guaranteeAfterFails}}次保底)
+      </text>
+    </view>
+  </view>
+
+  <!-- 奖品柜 -->
+  <view class="prize-cabinet">
+    <view class="cabinet-header">
+      <text class="cabinet-title">我的娃娃</text>
+      <view class="cabinet-action" bindtap="goToExchange">
+        <text>兑换</text>
+      </view>
+    </view>
+    <view class="cabinet-grid">
+      <view class="cabinet-item" wx:for="{{config.prizes}}" wx:key="id">
+        <view class="item-box {{myPrizes[item.id] > 0 ? '' : 'empty'}}">
+          <image class="item-img" src="{{item.image}}" mode="aspectFit"></image>
+        </view>
+        <text class="item-count">x{{myPrizes[item.id] || 0}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 中奖弹窗 -->
+<view class="modal {{showWinModal ? 'show' : ''}}" catchtouchmove="preventMove">
+  <view class="modal-mask" bindtap="closeModal"></view>
+  <view class="modal-content">
+    <view class="modal-header win">
+      <text class="modal-title">恭喜获得!</text>
+    </view>
+    <view class="modal-body">
+      <view class="prize-display">
+        <image class="prize-img" src="{{wonPrize.image}}" mode="aspectFit"></image>
+      </view>
+      <text class="prize-name">{{wonPrize.name}}</text>
+      <text class="prize-desc">{{wonPrize.description}}</text>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-secondary" bindtap="closeModal">收下</button>
+      <button class="btn-primary" bindtap="playAgain" 
+              disabled="{{userPoints < config.costPerPlay || todayPlays >= config.dailyLimit}}">
+        再来一次
+      </button>
+    </view>
+  </view>
+</view>
+
+<!-- 未中奖弹窗 -->
+<view class="modal {{showLoseModal ? 'show' : ''}}" catchtouchmove="preventMove">
+  <view class="modal-mask" bindtap="closeModal"></view>
+  <view class="modal-content">
+    <view class="modal-header lose">
+      <text class="modal-title">差一点点!</text>
+    </view>
+    <view class="modal-body">
+      <text class="lose-text">爪子滑了...</text>
+      <text class="lose-tip">再接再厉!</text>
+      <view class="guarantee-info" wx:if="{{consecutiveFails > 0}}">
+        <text>连续{{consecutiveFails}}次未中 ({{config.guaranteeAfterFails}}次必中)</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-secondary" bindtap="closeModal">返回</button>
+      <button class="btn-primary" bindtap="playAgain"
+              disabled="{{userPoints < config.costPerPlay || todayPlays >= config.dailyLimit}}">
+        再来一次
+      </button>
+    </view>
+  </view>
+</view>

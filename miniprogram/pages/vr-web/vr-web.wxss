@@ -1,0 +1,57 @@
+/* VR全景页面样式 */
+page {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.no-url {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 40rpx;
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+}
+
+.tip-icon {
+  font-size: 120rpx;
+  margin-bottom: 40rpx;
+}
+
+.tip-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.tip-desc {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 16rpx;
+  text-align: center;
+}
+
+.tip-note {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 0 40rpx;
+  line-height: 1.6;
+}
+
+.back-btn {
+  margin-top: 60rpx;
+  padding: 20rpx 80rpx;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 2rpx solid rgba(255,255,255,0.5);
+  border-radius: 50rpx;
+  font-size: 28rpx;
+}
+
+.back-btn:active {
+  background: rgba(255,255,255,0.3);
+}

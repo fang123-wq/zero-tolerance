@@ -1,0 +1,318 @@
+.container {
+  padding: 24rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 展馆头图 */
+.museum-header {
+  margin-bottom: 32rpx;
+}
+
+.header-bg {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 200rpx;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.header-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12rpx;
+}
+
+.header-desc {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.vr-btn {
+  background: rgba(255,255,255,0.2);
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vr-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.vr-text {
+  font-size: 24rpx;
+  color: #fff;
+}
+
+/* 区块标题 */
+.section {
+  margin-bottom: 32rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 24rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #1a237e;
+}
+
+/* 展区网格 */
+.zone-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.zone-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.zone-number {
+  width: 60rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: bold;
+  margin-right: 16rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.zone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 35, 126, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zone-icon {
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.zone-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.zone-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.zone-desc {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.zone-status {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20rpx;
+  color: #fff;
+}
+
+.zone-status.visited {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+
+/* 导览方式 */
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.mode-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mode-icon {
+  font-size: 56rpx;
+  margin-bottom: 16rpx;
+}
+
+.mode-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.mode-desc {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+/* 弹窗 */
+.zone-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.zone-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 85%;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s;
+}
+
+.zone-modal.show .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.modal-number {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 16rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-right: 20rpx;
+}
+
+.modal-title-wrap {
+  flex: 1;
+}
+
+.modal-title {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.modal-subtitle {
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.modal-close {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.modal-body {
+  padding: 30rpx;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.modal-intro {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.8;
+}
+
+.modal-highlights {
+  margin-top: 24rpx;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+}
+
+.highlight-item {
+  font-size: 26rpx;
+  color: #666;
+  padding: 8rpx 0;
+  display: flex;
+  align-items: center;
+}
+
+.highlight-dot {
+  color: #1a237e;
+  margin-right: 12rpx;
+}
+
+.modal-footer {
+  padding: 20rpx 30rpx 30rpx;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  color: #fff;
+  border: none;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+}

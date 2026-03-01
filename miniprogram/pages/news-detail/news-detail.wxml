@@ -1,0 +1,97 @@
+<view class="container">
+  <!-- 文章头部 -->
+  <view class="article-header">
+    <view class="article-tag">
+      <text class="tag-icon">📰</text>
+      <text class="tag-text">禁毒资讯</text>
+    </view>
+    <text class="article-title">{{news.title}}</text>
+    <view class="article-meta">
+      <text class="meta-date">📅 {{news.date}}</text>
+      <text class="meta-source" wx:if="{{news.source}}">📍 {{news.source}}</text>
+    </view>
+  </view>
+
+  <!-- 封面图片 -->
+  <view class="cover-section" wx:if="{{news.coverImage}}">
+    <image class="cover-image" src="{{news.coverImage}}" mode="aspectFill" />
+  </view>
+
+  <!-- 摘要 -->
+  <view class="summary-section" wx:if="{{news.summary}}">
+    <view class="summary-box">
+      <text class="summary-label">📋 摘要</text>
+      <text class="summary-text">{{news.summary}}</text>
+    </view>
+  </view>
+
+  <!-- 正文内容 -->
+  <view class="content-section">
+    <block wx:for="{{contentBlocks}}" wx:key="index">
+      <!-- 段落文字 -->
+      <view class="content-paragraph" wx:if="{{item.type === 'text'}}">
+        <text class="paragraph-text">{{item.content}}</text>
+      </view>
+      
+      <!-- 图片 -->
+      <view class="content-image" wx:if="{{item.type === 'image'}}">
+        <image class="inline-image" src="{{item.src}}" mode="widthFix" bindtap="previewImage" data-src="{{item.src}}" />
+        <text class="image-caption" wx:if="{{item.caption}}">{{item.caption}}</text>
+      </view>
+
+      <!-- 重点提示 -->
+      <view class="content-highlight" wx:if="{{item.type === 'highlight'}}">
+        <view class="highlight-box {{item.style || 'warning'}}">
+          <text class="highlight-icon">{{item.icon || '⚠️'}}</text>
+          <text class="highlight-text">{{item.content}}</text>
+        </view>
+      </view>
+
+      <!-- 数据卡片 -->
+      <view class="content-data" wx:if="{{item.type === 'data'}}">
+        <view class="data-card">
+          <text class="data-title">{{item.title}}</text>
+          <view class="data-items">
+            <view class="data-item" wx:for="{{item.items}}" wx:for-item="dataItem" wx:key="label">
+              <text class="data-value">{{dataItem.value}}</text>
+              <text class="data-label">{{dataItem.label}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 引用 -->
+      <view class="content-quote" wx:if="{{item.type === 'quote'}}">
+        <view class="quote-box">
+          <text class="quote-mark">"</text>
+          <text class="quote-text">{{item.content}}</text>
+          <text class="quote-author" wx:if="{{item.author}}">—— {{item.author}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 相关标签 -->
+  <view class="tags-section" wx:if="{{news.tags && news.tags.length > 0}}">
+    <text class="tags-label">🏷️ 相关标签</text>
+    <view class="tags-list">
+      <text class="tag-item" wx:for="{{news.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-section">
+    <view class="footer-tip">
+      <text class="tip-icon">🛡️</text>
+      <text class="tip-text">珍爱生命，远离毒品</text>
+    </view>
+    <view class="footer-actions">
+      <button class="action-btn share-btn" open-type="share">
+        <text class="btn-icon">📤</text>
+        <text class="btn-text">分享</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

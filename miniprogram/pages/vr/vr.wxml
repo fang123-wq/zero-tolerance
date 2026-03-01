@@ -1,0 +1,146 @@
+<!--pages/vr/vr.wxml-->
+<view class="vr-container">
+  <!-- 顶部导航栏 -->
+  <view class="top-bar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">◀</text>
+      <text>返回</text>
+    </view>
+    <view class="title">{{currentScene.name}}</view>
+    <view class="help-btn" bindtap="showHelp">
+      <text>?</text>
+    </view>
+  </view>
+
+  <!-- 全景图区域 -->
+  <movable-area class="panorama-area">
+    <movable-view 
+      class="panorama-view"
+      style="width: {{displayWidth ? displayWidth + 'px' : '200%'}}; height: 100%;"
+      direction="all"
+      x="{{viewX}}"
+      y="{{viewY}}"
+      scale="{{scale}}"
+      scale-min="{{scaleMin}}"
+      scale-max="{{scaleMax}}"
+      bindchange="onViewChange"
+      bindscale="onScaleChange"
+    >
+      <image 
+        class="panorama-image" 
+        src="{{currentScene.image}}" 
+        mode="heightFix"
+        bindload="onImageLoad"
+      ></image>
+      
+      <!-- 热点层 -->
+      <view 
+        wx:for="{{hotspots}}" 
+        wx:key="id"
+        class="hotspot hotspot-{{item.type}} {{item.arrow_type ? 'arrow-'+item.arrow_type : ''}}"
+        style="left: {{item.screenX}}px; top: {{item.screenY}}px;"
+        data-hotspot="{{item}}"
+        catchtap="onHotspotTap"
+      >
+        <!-- 导航箭头 -->
+        <block wx:if="{{item.type === 'navigation'}}">
+          <view class="hotspot-arrow">
+            <text wx:if="{{item.arrow_type === 'left'}}">←</text>
+            <text wx:elif="{{item.arrow_type === 'right'}}">→</text>
+            <text wx:elif="{{item.arrow_type === 'forward'}}">↑</text>
+            <text wx:elif="{{item.arrow_type === 'back'}}">↓</text>
+            <text wx:else>→</text>
+          </view>
+          <view class="hotspot-label">{{item.label}}</view>
+        </block>
+        
+        <!-- 信息点 -->
+        <block wx:elif="{{item.type === 'info'}}">
+          <view class="hotspot-icon info-icon">i</view>
+          <view wx:if="{{item.label}}" class="hotspot-label">{{item.label}}</view>
+        </block>
+        
+        <!-- 链接点 -->
+        <block wx:elif="{{item.type === 'link'}}">
+          <view class="hotspot-icon link-icon">
+            <text wx:if="{{item.icon === 'game'}}">🎮</text>
+            <text wx:elif="{{item.icon === 'quiz'}}">❓</text>
+            <text wx:else>🔗</text>
+          </view>
+          <view class="hotspot-label">{{item.label}}</view>
+        </block>
+      </view>
+    </movable-view>
+  </movable-area>
+
+  <!-- 场景导航 -->
+  <view class="scene-nav">
+    <scroll-view scroll-x class="scene-scroll">
+      <view 
+        wx:for="{{scenes}}" 
+        wx:key="id" 
+        class="scene-item {{currentScene.id === item.id ? 'active' : ''}}"
+        data-scene-id="{{item.id}}"
+        bindtap="onSceneNavTap"
+      >
+        <image class="scene-thumb" src="{{item.image}}" mode="aspectFill"></image>
+        <text class="scene-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 提示栏 -->
+  <view class="tip-bar">
+    <text>💡 拖动图片浏览全景，点击箭头切换场景</text>
+  </view>
+
+  <!-- 信息弹窗 -->
+  <view wx:if="{{showInfoModal}}" class="modal-overlay" bindtap="closeInfoModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">{{infoData.title}}</text>
+        <view class="modal-close" bindtap="closeInfoModal">×</view>
+      </view>
+      <view class="modal-body">
+        <text class="modal-text">{{infoData.content}}</text>
+      </view>
+      <view class="modal-footer">
+        <view class="modal-btn" bindtap="closeInfoModal">知道了</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 帮助弹窗 -->
+  <view wx:if="{{showHelpModal}}" class="modal-overlay" bindtap="closeHelp">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">操作指南</text>
+        <view class="modal-close" bindtap="closeHelp">×</view>
+      </view>
+      <view class="modal-body help-body">
+        <view class="help-item">
+          <text class="help-icon">👆</text>
+          <text>拖动图片浏览全景</text>
+        </view>
+        <view class="help-item">
+          <text class="help-icon">🤏</text>
+          <text>双指缩放调整视野</text>
+        </view>
+        <view class="help-item">
+          <text class="help-icon">→</text>
+          <text>点击箭头切换场景</text>
+        </view>
+        <view class="help-item">
+          <text class="help-icon">ℹ️</text>
+          <text>点击信息点查看详情</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载提示 -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

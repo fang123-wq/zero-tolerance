@@ -1,0 +1,178 @@
+<view class="container">
+  <!-- 顶部进度条 -->
+  <view class="progress-bar">
+    <text class="progress-text">浏览进度：{{viewProgress.viewed}}/{{viewProgress.total}} ({{viewProgress.percent}}%)</text>
+    <view class="progress-track">
+      <view class="progress-fill" style="width: {{viewProgress.percent}}%"></view>
+    </view>
+  </view>
+
+  <!-- 展区选择器 -->
+  <scroll-view class="zone-scroll" scroll-x="true" enhanced="true" show-scrollbar="false">
+    <view class="zone-tabs">
+      <view class="zone-tab {{currentZoneIndex === index ? 'active' : ''}}" 
+            wx:for="{{zones}}" wx:key="id" 
+            data-index="{{index}}" bindtap="onZoneChange">
+        <text class="zone-number">{{item.number}}</text>
+        <text class="zone-name">{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 分区Tab -->
+  <scroll-view class="section-scroll" scroll-x="true" wx:if="{{currentZone.sections.length > 0}}">
+    <view class="section-tabs">
+      <view class="section-tab {{currentSectionIndex === index ? 'active' : ''}}"
+            wx:for="{{currentZone.sections}}" wx:key="id"
+            data-index="{{index}}" bindtap="onSectionChange">
+        <text>{{item.title}}</text>
+        <text class="section-count">({{item.items.length}})</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 图文卡片网格 -->
+  <scroll-view class="content-scroll" scroll-y="true">
+    <view class="card-grid">
+      <view class="card-item" wx:for="{{items}}" wx:key="id" 
+            data-index="{{index}}" bindtap="onItemTap">
+        <view class="card-image-wrap">
+          <image class="card-image" src="{{item.image}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="card-viewed" wx:if="{{viewedItems[item.id]}}">✓已读</view>
+          <view class="card-favorite {{favorites[item.id] ? 'active' : ''}}" 
+                catchtap="toggleFavorite" data-id="{{item.id}}">
+            {{favorites[item.id] ? '♥' : '♡'}}
+          </view>
+        </view>
+        <view class="card-info">
+          <text class="card-name">{{item.name}}</text>
+          <view class="card-danger" wx:if="{{item.dangerLevel}}">
+            <view class="danger-bar level-{{item.dangerLevel}}"></view>
+            <text class="danger-text">{{item.dangerLevel}}级</text>
+          </view>
+          <text class="card-alias" wx:if="{{item.alias}}">{{item.alias}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 收藏入口 -->
+    <view class="favorites-entry" bindtap="goToFavorites" wx:if="{{favoritesCount > 0}}">
+      <text class="favorites-icon">💾</text>
+      <text class="favorites-text">我的收藏 ({{favoritesCount}})</text>
+      <text class="favorites-arrow">></text>
+    </view>
+  </scroll-view>
+
+  <!-- 搜索按钮 -->
+  <view class="search-btn" bindtap="openSearch">🔍</view>
+
+  <!-- 搜索弹窗 -->
+  <view class="search-modal {{showSearch ? 'show' : ''}}" bindtap="closeSearch">
+    <view class="search-content" catchtap="stopPropagation">
+      <view class="search-header">
+        <input class="search-input" placeholder="搜索毒品名称或别名..." 
+               value="{{searchKeyword}}" bindinput="onSearchInput" focus="{{showSearch}}"/>
+        <text class="search-cancel" bindtap="closeSearch">取消</text>
+      </view>
+
+      <!-- 热门搜索 -->
+      <view class="search-section" wx:if="{{!searchKeyword}}">
+        <text class="search-title">热门搜索</text>
+        <view class="keyword-list">
+          <text class="keyword-tag" wx:for="{{hotKeywords}}" wx:key="*this"
+                data-keyword="{{item}}" bindtap="onHotKeywordTap">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 搜索历史 -->
+      <view class="search-section" wx:if="{{!searchKeyword && searchHistory.length > 0}}">
+        <view class="search-title-row">
+          <text class="search-title">搜索历史</text>
+          <text class="clear-btn" bindtap="clearHistory">清空</text>
+        </view>
+        <view class="keyword-list">
+          <text class="keyword-tag" wx:for="{{searchHistory}}" wx:key="*this"
+                data-keyword="{{item}}" bindtap="onHistoryTap">{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 搜索结果 -->
+      <scroll-view class="search-results" scroll-y="true" wx:if="{{searchKeyword}}">
+        <view class="no-result" wx:if="{{searchResults.length === 0}}">
+          <text>未找到相关内容</text>
+        </view>
+        <view class="result-item" wx:for="{{searchResults}}" wx:key="item.id"
+              data-item="{{item.item}}" bindtap="onSearchResultTap">
+          <image class="result-image" src="{{item.item.image}}" mode="aspectFill"></image>
+          <view class="result-info">
+            <text class="result-name">{{item.item.name}}</text>
+            <text class="result-alias" wx:if="{{item.item.alias}}">别名：{{item.item.alias}}</text>
+            <text class="result-path">{{item.zoneName}} > {{item.sectionTitle}}</text>
+          </view>
+          <view class="result-danger" wx:if="{{item.item.dangerLevel}}">
+            <view class="danger-bar level-{{item.item.dangerLevel}}"></view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 详情弹窗 -->
+  <view class="detail-modal {{showDetail ? 'show' : ''}}" bindtap="closeDetail">
+    <view class="detail-content" catchtap="stopPropagation" wx:if="{{currentItem}}">
+      <view class="detail-close" bindtap="closeDetail">×</view>
+      
+      <view class="detail-image-wrap" bindtap="previewImage" data-src="{{currentItem.image}}">
+        <image class="detail-image" src="{{currentItem.image}}" mode="aspectFit"></image>
+        <text class="detail-image-tip">点击放大</text>
+      </view>
+
+      <scroll-view class="detail-scroll" scroll-y="true">
+        <view class="detail-header">
+          <text class="detail-name">{{currentItem.name}}</text>
+          <view class="detail-favorite {{favorites[currentItem.id] ? 'active' : ''}}" 
+                bindtap="toggleFavorite">
+            {{favorites[currentItem.id] ? '♥ 已收藏' : '♡ 收藏'}}
+          </view>
+        </view>
+
+        <text class="detail-alias" wx:if="{{currentItem.alias}}">别名：{{currentItem.alias}}</text>
+
+        <view class="detail-danger" wx:if="{{currentItem.dangerLevel}}">
+          <text class="danger-label">危险等级</text>
+          <view class="danger-display">
+            <view class="danger-bar-large level-{{currentItem.dangerLevel}}"></view>
+            <text class="danger-level-text level-{{currentItem.dangerLevel}}">
+              {{currentItem.dangerLevel === 5 ? '极度危险' : currentItem.dangerLevel === 4 ? '高风险' : currentItem.dangerLevel === 3 ? '中等风险' : currentItem.dangerLevel === 2 ? '较低风险' : '低风险'}} ({{currentItem.dangerLevel}}级)
+            </text>
+          </view>
+        </view>
+
+        <view class="detail-section" wx:if="{{currentItem.description}}">
+          <text class="section-label">【简介】</text>
+          <text class="section-text">{{currentItem.description}}</text>
+        </view>
+
+        <view class="detail-section" wx:if="{{currentItem.harm}}">
+          <text class="section-label">【危害】</text>
+          <text class="section-text harm-text">{{currentItem.harm}}</text>
+        </view>
+      </scroll-view>
+
+      <view class="detail-footer">
+        <view class="footer-btn {{currentItemIndex === 0 ? 'disabled' : ''}}" bindtap="prevItem">
+          <text>◀ 上一个</text>
+        </view>
+        <view class="footer-indicator">
+          <text>{{currentItemIndex + 1}} / {{items.length}}</text>
+        </view>
+        <button class="footer-btn share-btn" open-type="share">
+          <text>分享</text>
+        </button>
+        <view class="footer-btn {{currentItemIndex === items.length - 1 ? 'disabled' : ''}}" bindtap="nextItem">
+          <text>下一个 ▶</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

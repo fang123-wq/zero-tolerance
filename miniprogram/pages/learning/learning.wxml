@@ -1,0 +1,164 @@
+<view class="container">
+  <!-- 顶部导航 -->
+  <view class="header">
+    <view class="back-btn" bindtap="goBack">‹</view>
+    <text class="title">学习记录</text>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tabs">
+    <view class="tab-item {{activeTab === 'stats' ? 'active' : ''}}" bindtap="switchTab" data-tab="stats">
+      <text>统计</text>
+    </view>
+    <view class="tab-item {{activeTab === 'zone' ? 'active' : ''}}" bindtap="switchTab" data-tab="zone">
+      <text>展区</text>
+    </view>
+    <view class="tab-item {{activeTab === 'quiz' ? 'active' : ''}}" bindtap="switchTab" data-tab="quiz">
+      <text>答题</text>
+    </view>
+    <view class="tab-item {{activeTab === 'story' ? 'active' : ''}}" bindtap="switchTab" data-tab="story">
+      <text>故事</text>
+    </view>
+    <view class="tab-item {{activeTab === 'audio' ? 'active' : ''}}" bindtap="switchTab" data-tab="audio">
+      <text>语音</text>
+    </view>
+  </view>
+
+  <!-- 统计面板 -->
+  <scroll-view wx:if="{{activeTab === 'stats'}}" class="content" scroll-y>
+    <view class="stats-panel">
+      <view class="stats-title">📊 学习概况</view>
+      
+      <view class="stats-grid">
+        <view class="stats-card">
+          <text class="stats-value">{{stats.zoneVisits}}</text>
+          <text class="stats-label">展区访问</text>
+        </view>
+        <view class="stats-card">
+          <text class="stats-value">{{stats.quizCount}}</text>
+          <text class="stats-label">答题次数</text>
+        </view>
+        <view class="stats-card">
+          <text class="stats-value">{{stats.storyCount}}</text>
+          <text class="stats-label">故事完成</text>
+        </view>
+        <view class="stats-card">
+          <text class="stats-value">{{stats.audioCount}}</text>
+          <text class="stats-label">语音收听</text>
+        </view>
+      </view>
+
+      <view class="stats-title">📈 答题统计</view>
+      <view class="stats-detail">
+        <view class="detail-row">
+          <text class="detail-label">累计答题</text>
+          <text class="detail-value">{{stats.totalQuestions}}题</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">答对题数</text>
+          <text class="detail-value">{{stats.correctAnswers}}题</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">正确率</text>
+          <text class="detail-value highlight">{{stats.correctRate}}%</text>
+        </view>
+      </view>
+
+      <view class="stats-title">🎯 成就统计</view>
+      <view class="stats-detail">
+        <view class="detail-row">
+          <text class="detail-label">完美结局</text>
+          <text class="detail-value">{{stats.goodEndingCount}}次</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">语音听完</text>
+          <text class="detail-value">{{stats.audioCompleted}}个</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 展区记录 -->
+  <scroll-view wx:if="{{activeTab === 'zone'}}" class="content" scroll-y bindscrolltolower="loadMore">
+    <view class="record-list">
+      <view class="record-item" wx:for="{{zoneRecords}}" wx:key="id">
+        <view class="record-icon">🏛️</view>
+        <view class="record-content">
+          <text class="record-title">{{item.zoneName}}</text>
+          <text class="record-time">{{formatDate(item.visitDate)}}</text>
+        </view>
+        <view class="record-extra">
+          <text class="duration-text">{{formatDuration(item.duration)}}</text>
+        </view>
+      </view>
+      <view wx:if="{{zoneRecords.length === 0 && !loading}}" class="empty-tip">
+        <text>暂无访问记录</text>
+      </view>
+      <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+    </view>
+  </scroll-view>
+
+  <!-- 答题记录 -->
+  <scroll-view wx:if="{{activeTab === 'quiz'}}" class="content" scroll-y bindscrolltolower="loadMore">
+    <view class="record-list">
+      <view class="record-item" wx:for="{{quizRecords}}" wx:key="id">
+        <view class="record-icon">📝</view>
+        <view class="record-content">
+          <text class="record-title">{{getQuizTypeText(item.quizType)}}</text>
+          <text class="record-time">{{formatDate(item.completedAt)}}</text>
+        </view>
+        <view class="record-extra">
+          <text class="score-text">{{item.correctAnswers}}/{{item.totalQuestions}}</text>
+          <text class="rate-text">{{Math.round(item.correctAnswers/item.totalQuestions*100)}}%</text>
+        </view>
+      </view>
+      <view wx:if="{{quizRecords.length === 0 && !loading}}" class="empty-tip">
+        <text>暂无答题记录</text>
+      </view>
+      <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+    </view>
+  </scroll-view>
+
+  <!-- 故事记录 -->
+  <scroll-view wx:if="{{activeTab === 'story'}}" class="content" scroll-y bindscrolltolower="loadMore">
+    <view class="record-list">
+      <view class="record-item" wx:for="{{storyRecords}}" wx:key="id">
+        <view class="record-icon">📖</view>
+        <view class="record-content">
+          <text class="record-title">{{item.storyTitle}}</text>
+          <text class="record-time">{{formatDate(item.completedAt)}}</text>
+        </view>
+        <view class="record-extra">
+          <text class="ending-badge {{item.isGoodEnding ? 'good' : 'bad'}}">
+            {{item.isGoodEnding ? '完美结局' : '普通结局'}}
+          </text>
+        </view>
+      </view>
+      <view wx:if="{{storyRecords.length === 0 && !loading}}" class="empty-tip">
+        <text>暂无故事记录</text>
+      </view>
+      <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+    </view>
+  </scroll-view>
+
+  <!-- 语音记录 -->
+  <scroll-view wx:if="{{activeTab === 'audio'}}" class="content" scroll-y bindscrolltolower="loadMore">
+    <view class="record-list">
+      <view class="record-item" wx:for="{{audioRecords}}" wx:key="id">
+        <view class="record-icon">🎧</view>
+        <view class="record-content">
+          <text class="record-title">{{item.audioTitle}}</text>
+          <text class="record-time">{{formatDate(item.listenedAt)}}</text>
+        </view>
+        <view class="record-extra">
+          <text class="duration-text">{{formatDuration(item.duration)}}</text>
+          <text wx:if="{{item.completed}}" class="complete-badge">✓</text>
+        </view>
+      </view>
+      <view wx:if="{{audioRecords.length === 0 && !loading}}" class="empty-tip">
+        <text>暂无收听记录</text>
+      </view>
+      <view wx:if="{{loading}}" class="loading-tip">加载中...</view>
+    </view>
+  </scroll-view>
+</view>

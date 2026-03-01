@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-left">
+      <text class="logo-icon">🛡️</text>
+      <view class="header-text">
+        <text class="app-title">{{appName}}</text>
+        <text class="app-slogan">珍爱生命 · 远离毒品</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Banner轮播 -->
+  <swiper class="banner" indicator-dots autoplay circular interval="4000">
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <view class="banner-item" style="background: {{item.bgColor}}">
+        <view class="banner-content">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-desc">{{item.desc}}</text>
+        </view>
+        <text class="banner-icon">{{item.icon}}</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 核心功能入口 -->
+  <view class="section">
+    <view class="section-title">核心功能</view>
+    <view class="func-grid">
+      <view class="func-item" wx:for="{{mainFunctions}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}">
+        <view class="func-icon" style="background: {{item.bgColor}}">
+          <image wx:if="{{item.iconImg}}" class="func-icon-img" src="{{item.iconImg}}" mode="aspectFit"></image>
+          <text wx:else>{{item.icon}}</text>
+        </view>
+        <text class="func-name">{{item.name}}</text>
+        <text class="func-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日推荐 -->
+  <view class="section">
+    <view class="section-title">今日推荐</view>
+    <view class="recommend-card" bindtap="navigateTo" data-url="/pages/story-youth/story-youth">
+      <view class="recommend-left">
+        <view class="recommend-tag">🎭 沉浸式体验</view>
+        <text class="recommend-title">少年篇：一颗药丸的代价</text>
+        <text class="recommend-desc">约5分钟 · 互动叙事</text>
+        <view class="recommend-stats">
+          <text class="stat-item">⭐ 4.9分</text>
+          <text class="stat-item">👥 12,580人体验</text>
+        </view>
+      </view>
+      <view class="recommend-btn">立即体验 →</view>
+    </view>
+  </view>
+
+  <!-- 热门功能 -->
+  <view class="section">
+    <view class="section-title">热门功能</view>
+    <view class="hot-grid">
+      <view class="hot-item" wx:for="{{hotFunctions}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}">
+        <text class="hot-icon">{{item.icon}}</text>
+        <text class="hot-name">{{item.name}}</text>
+        <text class="hot-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 禁毒资讯 -->
+  <view class="section">
+    <view class="section-title">禁毒资讯</view>
+    <view class="news-list">
+      <view class="news-item" wx:for="{{newsList}}" wx:key="id" bindtap="goNewsDetail" data-id="{{item.id}}">
+        <view class="news-content">
+          <text class="news-title">{{item.title}}</text>
+          <view class="news-meta">
+            <text class="news-date">{{item.date}}</text>
+            <text class="news-tag">{{item.tag}}</text>
+          </view>
+        </view>
+        <text class="news-arrow">></text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view class="safe-bottom"></view>
+</view>

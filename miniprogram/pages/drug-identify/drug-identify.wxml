@@ -1,0 +1,93 @@
+<!--pages/drug-identify/drug-identify.wxml-->
+<view class="page">
+  <!-- 顶部背景 -->
+  <view class="header-bg"></view>
+
+  <view class="main-content">
+    <!-- 页面标题 -->
+    <view class="page-header">
+      <text class="page-title">毒品识别</text>
+      <text class="page-subtitle">了解毒品危害 · 远离毒品侵害</text>
+    </view>
+
+    <!-- 毒品识别图片 -->
+    <view class="card">
+      <view class="card-header">
+        <text class="card-title">常见毒品识别</text>
+        <text class="card-count">{{images.length}}张</text>
+      </view>
+      <view class="image-grid two-col">
+        <view class="image-card" wx:for="{{images}}" wx:key="id" bindtap="previewImage" data-url="{{item.url}}">
+          <image class="card-image" src="{{item.url}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="image-mask"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 毒品危害 -->
+    <view class="card danger-card">
+      <view class="card-header">
+        <text class="card-title">毒品危害</text>
+        <view class="danger-tag">警示</view>
+      </view>
+      <view class="image-grid three-col">
+        <view class="image-card" wx:for="{{harmImages}}" wx:key="id" bindtap="previewHarmImage" data-url="{{item.url}}">
+          <image class="card-image" src="{{item.url}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="image-mask"></view>
+          <view class="image-title">{{item.title}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 新型毒品 -->
+    <view class="card warning-card">
+      <view class="card-header">
+        <text class="card-title">新型毒品警示</text>
+        <view class="warning-tag">高度警惕</view>
+      </view>
+      <view class="image-grid two-col">
+        <view class="image-card large" wx:for="{{newDrugImages}}" wx:key="id" bindtap="previewNewDrugImage" data-url="{{item.url}}">
+          <image class="card-image" src="{{item.url}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="image-mask"></view>
+          <view class="image-title">{{item.title}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 安全提示 -->
+    <view class="card tips-card">
+      <view class="card-header">
+        <text class="card-title">安全提示</text>
+      </view>
+      <view class="tips-list">
+        <view class="tip-item">
+          <view class="tip-num">1</view>
+          <text class="tip-text">不接受陌生人的食品饮料</text>
+        </view>
+        <view class="tip-item">
+          <view class="tip-num">2</view>
+          <text class="tip-text">公共场所保管好自己的饮品</text>
+        </view>
+        <view class="tip-item">
+          <view class="tip-num">3</view>
+          <text class="tip-text">发现可疑物品立即报警</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 禁毒宣传手册 -->
+    <view class="card pdf-card" bindtap="openPdf">
+      <view class="pdf-content">
+        <view class="pdf-icon">📖</view>
+        <view class="pdf-info">
+          <text class="pdf-title">禁毒宣传手册</text>
+          <text class="pdf-desc">点击查看完整PDF文档</text>
+        </view>
+        <view class="pdf-arrow">›</view>
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="footer-space"></view>
+  </view>
+</view>

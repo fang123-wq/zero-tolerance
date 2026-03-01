@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>禁毒开源 · 项目展示页</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --ink: #0f1d2e;
+      --muted: #4d5d74;
+      --card: #ffffff;
+      --line: #d7dfeb;
+      --primary: #145ea8;
+      --primary-2: #0f7f8f;
+      --warm: #f6a823;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --shadow: 0 10px 30px rgba(9, 30, 66, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at 5% 10%, #e6effa 0%, var(--bg) 45%),
+                  radial-gradient(circle at 95% 0%, #e6f7f4 0%, transparent 35%),
+                  var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .wrap {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 56px 0 34px;
+      text-align: center;
+      animation: rise .55s ease;
+    }
+
+    .logo {
+      width: 88px;
+      height: 88px;
+      object-fit: cover;
+      border-radius: 22px;
+      border: 2px solid #fff;
+      box-shadow: var(--shadow);
+      background: #fff;
+    }
+
+    h1 {
+      margin: 16px 0 8px;
+      font-size: clamp(28px, 4.2vw, 44px);
+      letter-spacing: 1px;
+    }
+
+    .sub {
+      margin: 0 auto;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(15px, 2.2vw, 18px);
+      line-height: 1.65;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      font-weight: 700;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(16, 36, 68, .14);
+    }
+
+    .btn.main {
+      color: #fff;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin: 26px 0;
+      animation: rise .55s ease;
+    }
+
+    .cover {
+      width: 100%;
+      aspect-ratio: 16/7;
+      object-fit: cover;
+      background: #eef3fb;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section {
+      padding: 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: #fff;
+      transition: transform .2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: #edf2fa;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card .txt {
+      padding: 12px;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .steps {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .files {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 4px 8px 4px 0;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #f1f6ff;
+      border: 1px solid #d9e6fb;
+      color: #24456a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    footer {
+      text-align: center;
+      color: #5d6d83;
+      padding: 20px 0 42px;
+      font-size: 14px;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 860px) {
+      .grid, .files {
+        grid-template-columns: 1fr;
+      }
+      .section {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <img class="logo" src="docs/images/logo.png" alt="项目Logo占位图" />
+      <h1>禁毒开源 · 都昌禁毒云展馆</h1>
+      <p class="sub">
+        一个可静态运行的禁毒教育小程序项目展示页。你可以直接替换占位图，快速对外展示项目功能与落地效果。
+      </p>
+      <div class="actions">
+        <a class="btn main" href="README.md" target="_blank" rel="noopener">查看 README 文档</a>
+        <a class="btn" href="miniprogram/STATIC_RUN.md" target="_blank" rel="noopener">查看静态运行说明</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <img class="cover" src="docs/images/cover.png" alt="封面占位图" />
+      <div class="section">
+        <h2>项目模块</h2>
+        <span class="tag">云展馆</span>
+        <span class="tag">互动体验</span>
+        <span class="tag">知识答题</span>
+        <span class="tag">VR导览</span>
+        <span class="tag">积分礼品</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section">
+        <h2>功能展示</h2>
+        <div class="grid">
+          <article class="card">
+            <img src="docs/images/feature-museum.png" alt="云展馆占位图" />
+            <div class="txt">
+              <h3>云展馆导览</h3>
+              <p>8 个主题展区，支持展区互动、签名承诺、学习行为积分。</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="docs/images/feature-experience.png" alt="互动体验占位图" />
+            <div class="txt">
+              <h3>互动体验</h3>
+              <p>故事线 + 游戏体验，覆盖青少年、家庭、职场等教育场景。</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="docs/images/feature-quiz.png" alt="答题占位图" />
+            <div class="txt">
+              <h3>知识答题</h3>
+              <p>内置题库与答题模式，统计正确率并与积分系统联动。</p>
+            </div>
+          </article>
+          <article class="card">
+            <img src="docs/images/feature-vr-audio.png" alt="VR语音占位图" />
+            <div class="txt">
+              <h3>VR + 语音导览</h3>
+              <p>支持本地静态数据运行，方便离线演示与功能验收。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section">
+        <h2>快速开始</h2>
+        <ol class="steps">
+          <li>微信开发者工具导入目录：<code>miniprogram</code></li>
+          <li>确认 <code>miniprogram/config/app.js</code> 中 <code>mockData: true</code></li>
+          <li>直接编译运行（无需后端）</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section">
+        <h2>图片替换清单</h2>
+        <p class="sub" style="text-align:left; max-width:none; margin:0 0 8px;">
+          把你的图片放到 <code>docs/images/</code>，并使用下列文件名：
+        </p>
+        <div class="files">
+          <div>logo.png</div>
+          <div>cover.png</div>
+          <div>feature-museum.png</div>
+          <div>feature-experience.png</div>
+          <div>feature-quiz.png</div>
+          <div>feature-vr-audio.png</div>
+          <div>feature-points-gift.png</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Made for anti-drug education.</footer>
+</body>
+</html>

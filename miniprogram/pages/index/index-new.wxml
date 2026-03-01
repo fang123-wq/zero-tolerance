@@ -1,0 +1,158 @@
+<view class="container">
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-left">
+      <view class="logo-wrapper">
+        <image class="logo-icon" src="/assets/images/logo-shield.svg" mode="aspectFit" />
+      </view>
+      <view class="header-text">
+        <text class="app-title">{{appName}}</text>
+        <text class="app-slogan">守护无毒生活 · 共建美好家园</text>
+      </view>
+    </view>
+    <view class="header-right">
+      <view class="user-avatar-mini">
+        <text class="avatar-text">我</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Banner轮播 - 全新渐变设计 -->
+  <swiper class="banner" indicator-dots="{{true}}" autoplay="{{true}}" circular="{{true}}" interval="5000" indicator-active-color="#fff">
+    <swiper-item wx:for="{{bkey="id">
+anners}}" wx:      <view class="banner-item" style="background: linear-gradient(135deg, {{item.color1}}, {{item.color2}})">
+        <view class="banner-content">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-desc">{{item.desc}}</text>
+          <view class="banner-tag">{{item.tag}}</view>
+        </view>
+        <view class="banner-graphic">
+          <image class="banner-icon" src="{{item.iconUrl}}" mode="aspectFit" />
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 核心功能入口 - 卡片式设计 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">核心功能</view>
+      <view class="section-more">全部功能 ></view>
+    </view>
+    <view class="func-grid">
+      <view class="func-card" wx:for="{{mainFunctions}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}" style="--card-index: {{index}}">
+        <view class="func-icon-wrapper" style="background: linear-gradient(135deg, {{item.color1}}, {{item.color2}})">
+          <image class="func-icon" src="/assets/icons/{{item.icon}}.svg" mode="aspectFit" />
+        </view>
+        <text class="func-name">{{item.name}}</text>
+        <text class="func-desc">{{item.desc}}</text>
+        <view class="func-arrow">
+          <text>→</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日推荐 - 沉浸式大卡片 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">今日推荐</view>
+    </view>
+    <view class="recommend-card" bindtap="navigateTo" data-url="/pages/story-youth/story-youth">
+      <view class="recommend-bg-pattern"></view>
+      <view class="recommend-content">
+        <view class="recommend-header">
+          <view class="recommend-tag">
+            <text class="tag-icon">🎭</text>
+            <text class="tag-text">沉浸式体验</text>
+          </view>
+          <view class="recommend-badge">
+            <text class="badge-text">NEW</text>
+          </view>
+        </view>
+        <text class="recommend-title">少年篇：一颗药丸的代价</text>
+        <text class="recommend-desc">约5分钟 · 互动叙事 · 4.9分</text>
+        <view class="recommend-stats">
+          <view class="stat-item">
+            <text class="stat-icon">👥</text>
+            <text class="stat-value">12,580</text>
+            <text class="stat-label">人体验</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-icon">⭐</text>
+            <text class="stat-value">4.9</text>
+            <text class="stat-label">评分</text>
+          </view>
+        </view>
+        <view class="recommend-btn">
+          <text>立即体验</text>
+          <text class="btn-arrow">→</text>
+        </view>
+      </view>
+      <view class="recommend-illustration">
+        <view class="illustration-circle"></view>
+        <view class="illustration-shield"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷工具栏 -->
+  <view class="quick-tools">
+    <view class="tool-item" wx:for="{{quickTools}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}">
+      <view class="tool-icon" style="background: {{item.bgColor}}">
+        <text>{{item.icon}}</text>
+      </view>
+      <text class="tool-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 热门功能 - 双列卡片 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">热门功能</view>
+    </view>
+    <view class="hot-grid">
+      <view class="hot-card" wx:for="{{hotFunctions}}" wx:key="id" bindtap="navigateTo" data-url="{{item.url}}">
+        <view class="hot-card-header">
+          <view class="hot-icon-wrapper" style="background: {{item.bgColor}}">
+            <text class="hot-icon">{{item.icon}}</text>
+          </view>
+          <view class="hot-badge" wx:if="{{item.badge}}">{{item.badge}}</view>
+        </view>
+        <text class="hot-name">{{item.name}}</text>
+        <text class="hot-desc">{{item.desc}}</text>
+        <view class="hot-footer">
+          <text class="hot-arrow">了解详情 →</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 禁毒资讯 - 列表卡片 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">禁毒资讯</view>
+      <view class="section-more">更多 ></view>
+    </view>
+    <view class="news-list">
+      <view class="news-card" wx:for="{{newsList}}" wx:key="id" bindtap="goNewsDetail" data-id="{{item.id}}">
+        <view class="news-thumb">
+          <image class="thumb-img" src="{{item.image}}" mode="aspectFill" />
+        </view>
+        <view class="news-content">
+          <text class="news-title">{{item.title}}</text>
+          <view class="news-meta">
+            <text class="news-date">{{item.date}}</text>
+            <view class="news-tag">{{item.tag}}</view>
+          </view>
+        </view>
+        <view class="news-arrow">
+          <text>></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区 -->
+  <view class="safe-bottom"></view>
+</view>

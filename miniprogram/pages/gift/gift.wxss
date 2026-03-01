@@ -1,0 +1,365 @@
+.container {
+  padding: 24rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 积分卡片 */
+.points-card {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 24rpx;
+}
+
+.points-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.points-label {
+  font-size: 28rpx;
+  color: rgba(255,255,255,0.8);
+  margin-right: 16rpx;
+}
+
+.points-value {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.points-tip {
+  text-align: center;
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.6);
+  margin-top: 16rpx;
+}
+
+/* Tab切换 */
+.tabs {
+  display: flex;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #1a237e;
+  font-weight: bold;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 6rpx;
+  background: #1a237e;
+  border-radius: 3rpx;
+}
+
+/* 礼品列表 */
+.gift-section {
+  min-height: 400rpx;
+}
+
+.loading {
+  text-align: center;
+  padding: 60rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.empty {
+  text-align: center;
+  padding: 80rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.gift-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.gift-item {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.gift-image {
+  width: 100%;
+  height: 200rpx;
+  background: #f0f0f0;
+}
+
+.gift-icon {
+  width: 100%;
+  height: 200rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80rpx;
+  background: #f0f0f0;
+}
+
+.gift-info {
+  padding: 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.gift-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.gift-points {
+  font-size: 26rpx;
+  color: #1a237e;
+  font-weight: bold;
+}
+
+.gift-stock {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.gift-btn {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+  color: #fff;
+  text-align: center;
+  padding: 16rpx;
+  font-size: 26rpx;
+}
+
+.gift-btn.disabled {
+  background: #ccc;
+}
+
+/* 兑换记录 */
+.records-section {
+  min-height: 400rpx;
+}
+
+.record-item {
+  display: flex;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.record-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  background: #f0f0f0;
+  margin-right: 20rpx;
+}
+
+.record-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.record-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.record-points {
+  font-size: 26rpx;
+  color: #f44336;
+  margin-bottom: 8rpx;
+}
+
+.record-status {
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+  width: fit-content;
+}
+
+.status-pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.status-processing {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.status-completed {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status-cancelled {
+  background: #fafafa;
+  color: #9e9e9e;
+}
+
+/* 弹窗 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 85%;
+  max-width: 600rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 48rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 30rpx;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.exchange-gift {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  margin-bottom: 24rpx;
+}
+
+.exchange-image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 10rpx;
+  margin-right: 20rpx;
+}
+
+.exchange-info {
+  flex: 1;
+}
+
+.exchange-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+}
+
+.exchange-points {
+  font-size: 26rpx;
+  color: #1a237e;
+  font-weight: bold;
+  display: block;
+  margin-top: 8rpx;
+}
+
+.form-group {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 150rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #eee;
+}
+
+.btn-cancel, .btn-confirm {
+  flex: 1;
+  text-align: center;
+  padding: 28rpx;
+  font-size: 30rpx;
+}
+
+.btn-cancel {
+  color: #666;
+  border-right: 1rpx solid #eee;
+}
+
+.btn-confirm {
+  color: #1a237e;
+  font-weight: bold;
+}

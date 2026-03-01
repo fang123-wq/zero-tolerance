@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 展馆头图 -->
+  <view class="museum-header">
+    <view class="header-bg">
+      <view class="header-content">
+        <text class="header-title">{{appName}}</text>
+        <text class="header-desc">点击进入VR全景体验</text>
+      </view>
+      <view class="vr-btn" bindtap="enterVR">
+        <text class="vr-icon">🥽</text>
+        <text class="vr-text">VR全景</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 展区导航 -->
+  <view class="section">
+    <view class="section-title">展区导航</view>
+    <view class="zone-grid">
+      <view class="zone-item" wx:for="{{zones}}" wx:key="id" bindtap="enterZone" data-zone="{{item}}">
+        <view class="zone-number" style="background-image: url('{{item.coverImage}}'); background-size: cover; background-position: center;">
+          <view class="zone-overlay">
+            <text class="zone-icon">{{item.icon || item.number}}</text>
+          </view>
+        </view>
+        <view class="zone-info">
+          <text class="zone-name">{{item.name}}</text>
+          <text class="zone-desc">{{item.title}}</text>
+        </view>
+        <view class="zone-status {{visitedZones.includes(item.id) ? 'visited' : ''}}">
+          {{visitedZones.includes(item.id) ? '✓' : ''}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导览方式 -->
+  <view class="section">
+    <view class="section-title">导览方式</view>
+    <view class="mode-grid">
+      <view class="mode-item" bindtap="startAudioTour">
+        <text class="mode-icon">🎙️</text>
+        <text class="mode-name">语音导览</text>
+        <text class="mode-desc">专业讲解</text>
+      </view>
+      <view class="mode-item" bindtap="enterVR">
+        <text class="mode-icon">🥽</text>
+        <text class="mode-name">VR漫游</text>
+        <text class="mode-desc">360°全景</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 展区详情弹窗 -->
+  <view class="zone-modal {{showZoneModal ? 'show' : ''}}" bindtap="closeModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-number">{{currentZone.number}}</text>
+        <view class="modal-title-wrap">
+          <text class="modal-title">{{currentZone.name}}</text>
+          <text class="modal-subtitle">{{currentZone.title}}</text>
+        </view>
+        <view class="modal-close" bindtap="closeModal">×</view>
+      </view>
+      <view class="modal-body">
+        <text class="modal-desc">{{currentZone.description}}</text>
+        <view class="modal-intro">{{currentZone.content.intro}}</view>
+        
+        <!-- 展区特色内容 -->
+        <view class="modal-highlights" wx:if="{{currentZone.content.highlights}}">
+          <view class="highlight-item" wx:for="{{currentZone.content.highlights}}" wx:key="*this">
+            <text class="highlight-dot">•</text>
+            <text>{{item}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn-primary" bindtap="startZoneTour">开始参观</button>
+      </view>
+    </view>
+  </view>
+</view>

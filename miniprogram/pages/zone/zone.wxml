@@ -1,0 +1,274 @@
+<view class="container">
+  <!-- 展区头部 - 封面图 -->
+  <view class="zone-header">
+    <image wx:if="{{zone.coverImage}}" class="cover-image" src="{{zone.coverImage}}" mode="aspectFill" />
+    <view wx:else class="cover-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></view>
+    <view class="header-overlay">
+      <view class="header-nav">
+        <view class="nav-back" bindtap="backToMuseum">
+          <text class="nav-icon">←</text>
+          <text>返回</text>
+        </view>
+        <view class="nav-status">
+          <text wx:if="{{visited}}" class="status-visited">✓ 已参观</text>
+        </view>
+      </view>
+      <view class="header-content">
+        <text class="header-number">{{zone.number}}</text>
+        <text class="header-title">{{zone.name}}</text>
+        <text class="header-subtitle">{{zone.title}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="zone-content" scroll-y enhanced show-scrollbar="{{false}}">
+    <!-- 简介卡片 -->
+    <view class="intro-card">
+      <view class="intro-icon">{{zone.icon || '📍'}}</view>
+      <text class="intro-text">{{zone.content ? zone.content.intro : zone.description}}</text>
+      <button class="btn-visit" wx:if="{{!visited}}" bindtap="markVisited">
+        <text class="btn-icon">📍</text> 标记已参观 (+30积分)
+      </button>
+    </view>
+
+    <!-- 内容分区Tab -->
+    <view class="section-tabs" wx:if="{{zone.sections && zone.sections.length > 1}}">
+      <scroll-view class="tabs-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+        <view 
+          class="tab-item {{activeSection === index ? 'active' : ''}}" 
+          wx:for="{{zone.sections}}" 
+          wx:key="id"
+          data-index="{{index}}"
+          bindtap="switchSection">
+          {{item.title}}
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 分区内容 -->
+    <view class="section-content" wx:if="{{zone.sections && zone.sections.length > 0}}">
+      <block wx:for="{{zone.sections}}" wx:key="id">
+        <view class="section-panel" wx:if="{{activeSection === index}}">
+          
+          <!-- 图片画廊类型 -->
+          <view class="gallery-grid" wx:if="{{item.type === 'gallery'}}">
+            <view 
+              class="gallery-item" 
+              wx:for="{{item.items}}" 
+              wx:for-item="drug" 
+              wx:key="id"
+              data-item="{{drug}}"
+              data-section="{{item.title}}"
+              bindtap="openDetail">
+              <view class="gallery-image-wrap">
+                <image class="gallery-image" src="{{drug.image}}" mode="aspectFill" lazy-load />
+                <view class="gallery-badge" wx:if="{{drug.dangerLevel}}">
+                  <text wx:for="{{drug.dangerLevel}}" wx:key="*this" wx:for-item="star">⭐</text>
+                </view>
+                <view class="gallery-badge risk" wx:if="{{drug.riskLevel}}">
+                  风险{{drug.riskLevel}}级
+                </view>
+              </view>
+              <view class="gallery-info">
+                <text class="gallery-name">{{drug.name}}</text>
+                <text class="gallery-alias" wx:if="{{drug.alias}}">{{drug.alias}}</text>
+                <text class="gallery-desc">{{drug.description}}</text>
+              </view>
+            </view>
+          </view>
+
+          <!-- 承诺书类型 -->
+          <view class="pledge-section" wx:if="{{item.type === 'pledge'}}">
+            <view class="pledge-scroll">
+              <view class="pledge-header">
+                <text class="pledge-icon">📜</text>
+                <text class="pledge-title">禁毒承诺书</text>
+              </view>
+              <view class="pledge-content">
+                <text class="pledge-text">{{item.pledgeText}}</text>
+              </view>
+              <view class="pledge-footer">
+                <text class="pledge-signer">承诺人：_______________</text>
+                <text class="pledge-date">签署日期：{{today}}</text>
+              </view>
+            </view>
+            <button class="btn-sign" bindtap="openSignature" wx:if="{{!hasSigned}}">
+              <text class="btn-icon">✍️</text> 签署承诺书 (+30积分)
+            </button>
+            <view class="signed-badge" wx:else>
+              <text class="signed-icon">✓</text> 已签署承诺
+            </view>
+          </view>
+
+          <!-- 签名墙类型 -->
+          <view class="signature-wall" wx:if="{{item.type === 'signatureWall'}}">
+            <view class="wall-header">
+              <text class="wall-title">签名墙</text>
+              <text class="wall-count">已有 {{zone.stats.signatures || 0}} 人签署</text>
+            </view>
+            <view class="wall-names">
+              <text class="name-item" wx:for="{{signatureNames}}" wx:key="*this">{{item}}</text>
+            </view>
+          </view>
+
+        </view>
+      </block>
+    </view>
+
+    <!-- 问答按钮（可选功能） -->
+    <view class="quiz-section" wx:if="{{zone.quiz && zone.quiz.length > 0}}">
+      <view class="quiz-divider">
+        <text class="divider-line"></text>
+        <text class="divider-text">知识问答（可选）</text>
+        <text class="divider-line"></text>
+      </view>
+      <button class="btn-quiz {{quizCompleted ? 'completed' : ''}}" bindtap="startQuiz">
+        {{quizCompleted ? '✓ 已完成问答' : '📝 开始知识问答 (+10积分)'}}
+      </button>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 底部展区导航 -->
+  <view class="zone-nav">
+    <view class="nav-prev {{zoneIndex === 0 ? 'disabled' : ''}}" bindtap="goToPrevZone">
+      <text class="nav-arrow">◀</text>
+    </view>
+    <scroll-view class="nav-dots" scroll-x enhanced show-scrollbar="{{false}}">
+      <view 
+        class="nav-dot {{zoneIndex === index ? 'active' : ''}}" 
+        wx:for="{{zones}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToZone">
+        <text>{{item.icon || item.number}}</text>
+      </view>
+    </scroll-view>
+    <view class="nav-next {{zoneIndex === zones.length - 1 ? 'disabled' : ''}}" bindtap="goToNextZone">
+      <text class="nav-arrow">▶</text>
+    </view>
+  </view>
+
+  <!-- 详情弹窗 -->
+  <view class="detail-modal {{showDetail ? 'show' : ''}}">
+    <view class="modal-mask" bindtap="closeDetail" catchtouchmove="preventMove"></view>
+    <view class="modal-content" wx:if="{{currentItem}}">
+      <view class="modal-header">
+        <text class="modal-title">{{currentItem.name}}</text>
+        <view class="modal-close" bindtap="closeDetail">×</view>
+      </view>
+      <scroll-view class="modal-body" scroll-y>
+        <image class="detail-image" src="{{currentItem.image}}" mode="widthFix" />
+        <view class="detail-info">
+          <view class="detail-row" wx:if="{{currentItem.alias}}">
+            <text class="detail-label">别名：</text>
+            <text class="detail-value">{{currentItem.alias}}</text>
+          </view>
+          <view class="detail-row" wx:if="{{currentItem.dangerLevel}}">
+            <text class="detail-label">危害等级：</text>
+            <view class="detail-stars">
+              <text wx:for="{{currentItem.dangerLevel}}" wx:key="*this" wx:for-item="star">⭐</text>
+            </view>
+          </view>
+          <view class="detail-row" wx:if="{{currentItem.riskLevel}}">
+            <text class="detail-label">风险等级：</text>
+            <text class="detail-value risk-level">{{currentItem.riskLevel}}级</text>
+          </view>
+          <view class="detail-block">
+            <text class="detail-label">简介：</text>
+            <text class="detail-text">{{currentItem.description}}</text>
+          </view>
+          <view class="detail-block" wx:if="{{currentItem.harm}}">
+            <text class="detail-label harm">危害：</text>
+            <text class="detail-text">{{currentItem.harm}}</text>
+          </view>
+          <view class="detail-block" wx:if="{{currentItem.tips}}">
+            <text class="detail-label tips">防范提示：</text>
+            <text class="detail-text">{{currentItem.tips}}</text>
+          </view>
+          <view class="detail-block" wx:if="{{currentItem.detail}}">
+            <text class="detail-label">详细说明：</text>
+            <text class="detail-text">{{currentItem.detail}}</text>
+          </view>
+          <!-- 英雄特殊展示 -->
+          <view class="hero-tribute" wx:if="{{currentItem.sacrifice}}">
+            <text class="sacrifice-date">牺牲于 {{currentItem.sacrifice}}</text>
+            <button class="btn-candle" bindtap="lightCandle" data-id="{{currentItem.id}}">
+              🕯️ 点亮蜡烛致敬
+            </button>
+          </view>
+          <!-- 热线电话 -->
+          <view class="hotline-call" wx:if="{{currentItem.phone}}">
+            <button class="btn-call" bindtap="makeCall" data-phone="{{currentItem.phone}}">
+              📞 拨打 {{currentItem.phone}}
+            </button>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 问答弹窗 -->
+  <view class="quiz-modal {{showQuiz ? 'show' : ''}}">
+    <view class="quiz-content" wx:if="{{zone.quiz && zone.quiz.length > 0}}">
+      <view class="quiz-header">
+        <text class="quiz-title">知识问答</text>
+        <text class="quiz-progress">{{currentQuizIndex + 1}} / {{zone.quiz.length}}</text>
+        <view class="quiz-close" bindtap="closeQuiz">×</view>
+      </view>
+      <view class="quiz-body">
+        <text class="quiz-question">{{zone.quiz[currentQuizIndex].question}}</text>
+        <view class="quiz-options">
+          <view 
+            class="option-item {{selectedAnswer === idx ? 'selected' : ''}} {{answerSubmitted && idx === zone.quiz[currentQuizIndex].answer ? 'correct' : ''}} {{answerSubmitted && selectedAnswer === idx && idx !== zone.quiz[currentQuizIndex].answer ? 'wrong' : ''}}"
+            wx:for="{{zone.quiz[currentQuizIndex].options}}"
+            wx:key="*this"
+            wx:for-index="idx"
+            data-index="{{idx}}"
+            bindtap="selectAnswer">
+            <text class="option-letter">{{['A','B','C','D'][idx]}}</text>
+            <text class="option-text">{{item}}</text>
+          </view>
+        </view>
+        <view class="quiz-explanation" wx:if="{{answerSubmitted && zone.quiz[currentQuizIndex].explanation}}">
+          <text class="explanation-label">解析：</text>
+          <text class="explanation-text">{{zone.quiz[currentQuizIndex].explanation}}</text>
+        </view>
+      </view>
+      <view class="quiz-footer">
+        <button class="btn-submit" wx:if="{{!answerSubmitted}}" bindtap="submitAnswer">提交答案</button>
+        <button class="btn-next" wx:if="{{answerSubmitted}}" bindtap="nextQuestion">
+          {{currentQuizIndex < zone.quiz.length - 1 ? '下一题' : '查看结果'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 签名弹窗 -->
+  <view class="signature-modal {{showSignature ? 'show' : ''}}">
+    <view class="signature-content">
+      <view class="signature-header">
+        <text class="signature-title">签署禁毒承诺书</text>
+        <view class="signature-close" bindtap="closeSignature">×</view>
+      </view>
+      <view class="signature-body">
+        <text class="signature-tip">请在下方区域手写签名：</text>
+        <canvas 
+          type="2d" 
+          id="signatureCanvas" 
+          class="signature-canvas"
+          bindtouchstart="canvasStart"
+          bindtouchmove="canvasMove"
+          bindtouchend="canvasEnd">
+        </canvas>
+      </view>
+      <view class="signature-footer">
+        <button class="btn-clear" bindtap="clearCanvas">清除重写</button>
+        <button class="btn-confirm" bindtap="confirmSignature">确认签署</button>
+      </view>
+    </view>
+  </view>
+</view>

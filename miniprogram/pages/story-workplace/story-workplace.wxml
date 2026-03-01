@@ -1,0 +1,103 @@
+<view class="container">
+  <!-- 背景占位 -->
+  <view class="scene-bg-placeholder" wx:if="{{currentScene.type !== 'video'}}"></view>
+  <view class="overlay" wx:if="{{currentScene.type !== 'video'}}"></view>
+  
+  <!-- 进度条 -->
+  <view class="progress-bar">
+    <view class="progress-fill" style="width: {{progress}}%"></view>
+  </view>
+
+  <!-- 视频场景 -->
+  <block wx:if="{{currentScene.type === 'video'}}">
+    <view class="video-panel">
+      <view class="scene-title video-title" wx:if="{{currentScene.title}}">{{currentScene.title}}</view>
+      <video 
+        id="storyVideo"
+        class="story-video"
+        src="{{currentScene.videoUrl}}"
+        autoplay="{{true}}"
+        show-center-play-btn="{{true}}"
+        show-play-btn="{{true}}"
+        controls="{{true}}"
+        object-fit="contain"
+        bindended="onVideoEnded"
+        binderror="onVideoError"
+      ></video>
+      <view class="video-next-btn" wx:if="{{videoEnded}}" bindtap="goToNextScene">
+        <text>继续 →</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 选择场景 -->
+  <block wx:if="{{currentScene.type === 'choice'}}">
+    <view class="choice-panel">
+      <view class="choice-title">{{currentScene.title}}</view>
+      <view class="choice-question">{{currentScene.question}}</view>
+      <view class="choice-desc">{{currentScene.description}}</view>
+      
+      <!-- 倒计时 -->
+      <view class="countdown" wx:if="{{countdown > 0}}">
+        <view class="countdown-bar" style="width: {{(countdown / countdownTotal) * 100}}%"></view>
+        <text class="countdown-text">{{countdown}}s</text>
+      </view>
+      
+      <view class="choice-list">
+        <view class="choice-item" 
+              wx:for="{{currentScene.options}}" 
+              wx:key="id" 
+              bindtap="makeChoice" 
+              data-option="{{item}}">
+          <view class="choice-label" style="background: {{item.labelColor}}">{{item.label}}</view>
+          <view class="choice-main">
+            <view class="choice-text">{{item.text}}</view>
+            <view class="choice-sub">{{item.description}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 结局场景 -->
+  <block wx:if="{{currentScene.type === 'ending'}}">
+    <view class="ending-panel">
+      <view class="ending-rating">
+        <text class="stars">{{stars}}</text>
+        <text class="rating-text">{{currentScene.ratingText}}</text>
+      </view>
+      <view class="ending-title">{{currentScene.title}}</view>
+      
+      <!-- 结局反思 -->
+      <view class="ending-reflection">
+        <text class="reflection-text">{{currentScene.reflection}}</text>
+      </view>
+      
+      <!-- 警示文字 -->
+      <view class="ending-warning" wx:if="{{currentScene.warning}}">
+        <text class="warning-text">{{currentScene.warning}}</text>
+      </view>
+      
+      <!-- 成就 -->
+      <view class="achievement" wx:if="{{currentScene.achievement}}">
+        <view class="achievement-icon">🏆</view>
+        <view class="achievement-info">
+          <view class="achievement-name">{{currentScene.achievement.name}}</view>
+          <view class="achievement-desc">{{currentScene.achievement.description}}</view>
+        </view>
+      </view>
+      
+      <!-- 积分 -->
+      <view class="points-earned">
+        <text>+{{awardedPoints}} 积分</text>
+      </view>
+      
+      <!-- 操作按钮 -->
+      <view class="ending-actions">
+        <button class="btn-restart" bindtap="restartStory">重新体验</button>
+        <button class="btn-share" open-type="share">分享给朋友</button>
+        <button class="btn-back" bindtap="goBack">返回</button>
+      </view>
+    </view>
+  </block>
+</view>

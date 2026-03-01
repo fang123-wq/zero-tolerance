@@ -1,0 +1,235 @@
+<!--pages/claw/claw.wxml - 禁毒飞车冲刺-->
+<view class="container">
+
+  <!-- ====== 游戏主界面（游戏中） ====== -->
+  <block wx:if="{{gameState === 'playing'}}">
+    <canvas type="2d" id="gameCanvas" class="game-canvas"
+            bindtouchstart="onTouchStart"
+            bindtouchmove="onTouchMove"
+            bindtouchend="onTouchEnd"></canvas>
+    
+    <!-- HUD覆盖层（距离和分数） -->
+    <view class="hud">
+      <view class="hud-left">
+        <text class="hud-label">距离</text>
+        <text class="hud-val">{{distance}}m</text>
+      </view>
+      <view class="hud-right">
+        <text class="hud-label">⭐ {{stars}}</text>
+        <text class="hud-val score-val">{{score}}分</text>
+      </view>
+    </view>
+    <!-- 设置按钮 -->
+    <view class="settings-btn" bindtap="toggleSettings">⚙</view>
+    <!-- 设置面板 -->
+    <view class="settings-panel" wx:if="{{showSettings}}">
+      <view class="settings-mask" bindtap="toggleSettings"></view>
+      <view class="settings-card">
+        <text class="settings-title">设置</text>
+        <view class="settings-row">
+          <text class="settings-label">🎵 背景音乐</text>
+          <switch checked="{{musicOn}}" bindchange="toggleMusic" color="#00bcd4"/>
+        </view>
+        <view class="settings-row">
+          <text class="settings-label">🔊 音效</text>
+          <switch checked="{{sfxOn}}" bindchange="toggleSfx" color="#00bcd4"/>
+        </view>
+        <view class="settings-close" bindtap="toggleSettings">关闭</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ====== 开始界面 ====== -->
+  <block wx:if="{{gameState === 'idle'}}">
+    <view class="start-screen">
+      <!-- 顶部积分和设置 -->
+      <view class="top-bar">
+        <view class="points-box">
+          <text class="pts-label">我的积分</text>
+          <text class="pts-val">{{userPoints}}</text>
+        </view>
+        <view class="plays-box">
+          <text class="pts-label">今日剩余</text>
+          <text class="pts-val">{{dailyLimit - todayPlays}}/{{dailyLimit}}</text>
+          <text class="free-tag" wx:if="{{todayPlays < freeLimit}}">含{{freeLimit - todayPlays}}次免费</text>
+        </view>
+      </view>
+
+      <!-- 赛车主视觉 -->
+      <view class="hero-area">
+        <view class="car-display">
+          <image class="car-image" src="/assets/images/racing-car.png" mode="aspectFit"></image>
+        </view>
+        <text class="game-title">禁毒飞车冲刺</text>
+        <text class="game-desc">驾驶赛车躲避毒品障碍，收集星星</text>
+        <text class="game-desc">行驶越远吃星越多积分越高！</text>
+      </view>
+
+      <!-- 玩法说明 -->
+      <view class="rules-card">
+        <view class="rule-item">
+          <text class="rule-icon">🎁</text>
+          <text class="rule-text">每天前{{freeLimit}}次免费，之后消耗积分</text>
+        </view>
+        <view class="rule-item">
+          <text class="rule-icon">👆</text>
+          <text class="rule-text">触摸屏幕控制赛车移动</text>
+        </view>
+        <view class="rule-item">
+          <text class="rule-icon">⭐</text>
+          <text class="rule-text">收集星星加分，撞到毒品扣血</text>
+        </view>
+        <view class="rule-item">
+          <text class="rule-icon">🏁</text>
+          <text class="rule-text">血量耗尽游戏结束，驶得越远分越高</text>
+        </view>
+      </view>
+
+      <!-- 开始按钮 -->
+      <button class="start-btn {{todayPlays >= dailyLimit ? 'disabled' : ''}}"
+              bindtap="startGame"
+              disabled="{{todayPlays >= dailyLimit}}">
+        <text class="start-text">开始冲刺</text>
+        <text class="start-cost" wx:if="{{todayPlays < freeLimit}}">免费 (剩{{freeLimit - todayPlays}}次)</text>
+        <text class="start-cost" wx:else>消耗 {{costPerPlay}} 积分</text>
+      </button>
+      <text class="tip-text" wx:if="{{todayPlays >= freeLimit && userPoints < costPerPlay}}">积分不足，请通过答题等方式获取积分</text>
+      <text class="tip-text" wx:if="{{todayPlays >= dailyLimit}}">今日次数已用完，明天再来吧</text>
+
+      <!-- 保底提示 -->
+      <view class="guarantee-bar" wx:if="{{consecutiveFails > 0}}">
+        <text>🔥 连续{{consecutiveFails}}次未中奖 ({{guaranteeAfterFails}}次保底必中)</text>
+      </view>
+      
+      <!-- 设置按钮（移到这里） -->
+      <view class="settings-btn-bottom" bindtap="toggleSettings">
+        <text class="settings-icon-text">⚙️ 设置</text>
+      </view>
+
+      <!-- 旅程排行榜 -->
+      <view class="ranking-section">
+        <view class="sec-header">
+          <text class="sec-title">🏆 好友旅程排行</text>
+          <text class="my-journey-tag">我的旅程：第{{journeyNum}}旅程</text>
+        </view>
+        <view class="ranking-list">
+          <view class="ranking-item" wx:for="{{rankingList}}" wx:key="index">
+            <view class="rank-num {{index < 3 ? 'rank-top' : ''}}">{{index + 1}}</view>
+            <image class="rank-avatar" src="{{item.avatarUrl}}" mode="aspectFill"></image>
+            <text class="rank-name">{{item.nickName}}</text>
+            <text class="rank-journey">第{{item.journeyNum}}旅程</text>
+          </view>
+          <view wx:if="{{rankingList.length === 0}}" class="empty-tip">
+            <text>暂无排行数据</text>
+          </view>
+        </view>
+        <button class="btn-share" open-type="share">📢 邀请好友一起冲刺</button>
+      </view>
+
+      <!-- 奖品展示 -->
+      <view class="prize-section">
+        <text class="sec-title">🎁 奖品一览</text>
+        <view class="prize-grid">
+          <view class="prize-card {{item.rarity}}" wx:for="{{config.prizes}}" wx:key="id">
+            <image class="prize-image" src="{{item.image}}" mode="aspectFit"></image>
+            <text class="prize-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 中奖记录 -->
+      <view class="record-section">
+        <view class="sec-header">
+          <text class="sec-title">📋 中奖记录</text>
+          <text class="stat-tag">累计 +{{totalPointsEarned}}</text>
+        </view>
+        <view class="record-list">
+          <view class="record-item" wx:for="{{pointsHistory}}" wx:key="id" wx:if="{{index < 5}}">
+            <view class="record-left">
+              <text class="record-name">{{item.prizeName}}</text>
+              <text class="record-time">{{item.time}}</text>
+            </view>
+            <text class="record-points">+{{item.points}}</text>
+          </view>
+          <view wx:if="{{pointsHistory.length === 0}}" class="empty-tip">
+            <text>暂无记录，快来冲刺吧！</text>
+          </view>
+        </view>
+        <button class="btn-gift" bindtap="goToGiftShop">🎁 前往礼品商城兑换</button>
+      </view>
+    </view>
+    
+    <!-- 设置面板（开始界面） -->
+    <view class="settings-panel" wx:if="{{showSettings}}">
+      <view class="settings-mask" bindtap="toggleSettings"></view>
+      <view class="settings-card">
+        <text class="settings-title">设置</text>
+        <view class="settings-row">
+          <text class="settings-label">🎵 背景音乐</text>
+          <switch checked="{{musicOn}}" bindchange="toggleMusic" color="#00bcd4"/>
+        </view>
+        <view class="settings-row">
+          <text class="settings-label">🔊 音效</text>
+          <switch checked="{{sfxOn}}" bindchange="toggleSfx" color="#00bcd4"/>
+        </view>
+        <view class="settings-close" bindtap="toggleSettings">关闭</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ====== 游戏结束界面 ====== -->
+  <block wx:if="{{gameState === 'over'}}">
+    <view class="result-screen">
+      <view class="result-card">
+        <text class="result-emoji">{{gameWon ? '🏁' : '💥'}}</text>
+        <text class="result-title">{{gameComment}}</text>
+        <view class="result-stats">
+          <view class="stat-row">
+            <text class="stat-label">行驶距离</text>
+            <text class="stat-value">{{distance}}m</text>
+          </view>
+          <view class="stat-row">
+            <text class="stat-label">收集星星</text>
+            <text class="stat-value">{{stars}}个</text>
+          </view>
+          <view class="stat-row highlight-row">
+            <text class="stat-label">总积分</text>
+            <text class="stat-value score-highlight">{{score}}</text>
+          </view>
+        </view>
+
+        <!-- 正在抽奖 -->
+        <view class="lottery-area" wx:if="{{isDrawing}}">
+          <view class="loading-spinner"></view>
+          <text class="drawing-text">正在结算奖励...</text>
+        </view>
+
+        <!-- 抽奖结果 -->
+        <block wx:if="{{!isDrawing && showResult}}">
+          <view class="win-area" wx:if="{{isWin}}">
+            <text class="win-label">🎉 恭喜获得</text>
+            <view class="win-prize">
+              <image class="win-img" src="{{wonPrize.image}}" mode="aspectFit" wx:if="{{wonPrize.image}}"></image>
+              <text class="win-points">+{{wonPoints}} 积分</text>
+              <text class="win-name">{{wonPrize.name}}</text>
+            </view>
+          </view>
+          <view class="lose-area" wx:else>
+            <text class="lose-label">😅 差一点点，再接再厉！</text>
+            <view class="guarantee-bar" wx:if="{{consecutiveFails > 0}}">
+              <text>🔥 连续{{consecutiveFails}}次未中 ({{guaranteeAfterFails}}次保底)</text>
+            </view>
+          </view>
+        </block>
+
+        <view class="result-btns" wx:if="{{!isDrawing && showResult}}">
+          <button class="btn-back" bindtap="backToStart">返回</button>
+          <button class="btn-retry" bindtap="retryGame"
+                  disabled="{{userPoints < costPerPlay || todayPlays >= dailyLimit}}">
+            再来一局
+          </button>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
