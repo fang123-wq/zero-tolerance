@@ -69,6 +69,13 @@
 - 图文科普、危险等级、提示信息统一渲染
 - 便于后续扩展本地题库和素材包
 
+<table>
+  <tr>
+    <td><img src="docs/images/content-zone-1.png" width="420" alt="图文与展区内容管理界面 1" /></td>
+    <td><img src="docs/images/content-zone-2.png" width="420" alt="图文与展区内容管理界面 2" /></td>
+  </tr>
+</table>
+
 ### VR + 语音导览
 - VR 场景浏览（本地数据可回退）
 - 语音导览列表与播放控制
