@@ -203,6 +203,7 @@ node --check miniprogram/utils/api.js
 
 - GitHub Issues：用于问题反馈与需求讨论
 - 邮箱/公众号：请在此补充你的官方联系方式
+- 需要授权请联系我们
 
 ### 联系我们
 
