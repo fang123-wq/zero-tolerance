@@ -3,7 +3,7 @@ var storyReward = require('../../utils/storyReward.js');
 var app = getApp();
 
 var PRIMARY_BASE = (appConfig.apiBaseUrl || '').replace(/\/api\/?$/, '');
-var FALLBACK_BASES = ['http://127.0.0.1:3000', 'http://localhost:3000'];
+var FALLBACK_BASES = [];
 var SERVER_BASES = [];
 
 FALLBACK_BASES.forEach(function(base) {

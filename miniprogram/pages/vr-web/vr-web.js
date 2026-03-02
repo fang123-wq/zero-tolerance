@@ -4,7 +4,7 @@
 const appConfig = require('../../config/app.js');
 
 // VR全景页面配置 - 从配置文件读取
-var VR_BASE_URL = appConfig.vrBaseUrl || 'https://drug-vr.coiot.net/vr-panorama/';
+var VR_BASE_URL = appConfig.vrBaseUrl || '';
 
 
 Page({
