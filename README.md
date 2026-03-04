@@ -207,8 +207,21 @@ node --check miniprogram/utils/api.js
 
 ### 联系我们
 
-<img src="docs/images/contact-group.png" width="200" alt="交流群二维码（占位）" />
-<img src="docs/images/contact-wechat.png" width="200" alt="微信联系二维码（占位）" /> <img width="200" alt="contact-wangzhongni" src="https://github.com/user-attachments/assets/b2b432ab-268f-47f7-90f6-284da40143f3" />
+<p align="center">
+  <img src="docs/images/contact-group.png" width="31%" alt="交流群二维码（占位）" />
+  &nbsp;
+  <img src="docs/images/contact-wechat.png" width="31%" alt="微信联系二维码（占位）" />
+  &nbsp;
+  <img src="docs/images/contact-wangzhongni.png" width="31%" alt="王仲尼微信二维码" />
+</p>
+
+<p align="center">
+  <sub>交流群（问题讨论 / 反馈建议）</sub> &nbsp;|&nbsp;
+  <sub>官方微信（授权咨询 / 商务合作）</sub> &nbsp;|&nbsp;
+  <sub>王仲尼（江西 九江）</sub>
+</p>
+
+> 请将你提供的二维码图片保存为 `docs/images/contact-wangzhongni.png`。
 
 ---
 

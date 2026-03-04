@@ -186,6 +186,49 @@
       font-size: 14px;
     }
 
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+      padding: 14px;
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(16, 36, 68, .1);
+    }
+
+    .contact-card img {
+      width: min(100%, 220px);
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      background: #f8fbff;
+      border: 1px solid #e1e9f5;
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    .contact-card h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    .contact-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
     .tag {
       display: inline-block;
       margin: 4px 8px 4px 0;
@@ -307,6 +350,40 @@
           <div>feature-quiz.png</div>
           <div>feature-vr-audio.png</div>
           <div>feature-points-gift.png</div>
+          <div>contact-group.png</div>
+          <div>contact-wechat.png</div>
+          <div>contact-wangzhongni.png</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section">
+        <h2>联系我们</h2>
+        <p class="sub" style="text-align:left; max-width:none; margin:0 0 12px;">
+          扫码即可联系，建议优先通过交流群反馈问题，商务与授权可联系官方微信。
+        </p>
+        <div class="contact-grid">
+          <article class="contact-card">
+            <img src="docs/images/contact-group.png" alt="交流群二维码" />
+            <h3>交流群</h3>
+            <p>问题讨论 / 反馈建议</p>
+          </article>
+          <article class="contact-card">
+            <img src="docs/images/contact-wechat.png" alt="官方微信二维码" />
+            <h3>官方微信</h3>
+            <p>授权咨询 / 商务合作</p>
+          </article>
+          <article class="contact-card">
+            <img src="docs/images/contact-wangzhongni.png" alt="王仲尼微信二维码" />
+            <h3>王仲尼（江西 九江）</h3>
+            <p>扫码添加好友</p>
+          </article>
+          <article class="contact-card">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=20&data=https%3A%2F%2Fgithub.com%2Ffang123-wq%2Fzero-tolerance" alt="GitHub 仓库二维码" loading="lazy" />
+            <h3>GitHub 仓库</h3>
+            <p>扫码直达项目主页</p>
+          </article>
         </div>
       </div>
     </section>
