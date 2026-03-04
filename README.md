@@ -208,8 +208,7 @@ node --check miniprogram/utils/api.js
 ### 联系我们
 
 <img src="docs/images/contact-group.png" width="200" alt="交流群二维码（占位）" />
-<img src="docs/images/contact-wechat.png" width="200" alt="微信联系二维码（占位）" />
-<img width="1083" height="1464" alt="contact-wangzhongni" src="https://github.com/user-attachments/assets/b2b432ab-268f-47f7-90f6-284da40143f3" />
+<img src="docs/images/contact-wechat.png" width="200" alt="微信联系二维码（占位）" /> <img width="200" alt="contact-wangzhongni" src="https://github.com/user-attachments/assets/b2b432ab-268f-47f7-90f6-284da40143f3" />
 
 ---
 
